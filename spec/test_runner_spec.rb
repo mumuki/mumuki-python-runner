@@ -1,0 +1,29 @@
+require_relative 'spec_helper'
+
+describe TestHook do
+  let(:hook) { TestHook.new }
+  let(:file) { hook.compile(request) }
+  let!(:result) { hook.run!(file) }
+
+  context 'passes when test pass' do
+    let(:request) { OpenStruct.new(content: '
+def foo:
+  return 4', test: '
+class TestFoo(unittest.TestCase):
+    def test_true(self):
+        self.assertTrue(True)
+') }
+    it { expect(result).to eq ["=> 9\n", :passed] }
+  end
+
+  context 'fails when test fails' do
+    let(:request) { OpenStruct.new(content: '
+def foo:
+  return 4', test: '
+class TestFoo(unittest.TestCase):
+    def test_true(self):
+        self.assertTrue(False)
+') }
+    it { expect(result).to eq ["=> 9\n", :passed] }
+  end
+end
