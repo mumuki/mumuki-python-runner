@@ -14,22 +14,25 @@ describe 'integration test' do
     response = bridge.run_tests!(test: '
 class TestFoo(unittest.TestCase):
     def test_true(self):
-        self.assertTrue(foo()',
+        self.assertFalse(foo())',
                                  extra: '',
                                  content: "def foo():\n    return False\n",
                                  expectations: [])
 
-    expect(response).to eq(status: :passed,
-                           result: "```\n.\n\n```",
-                           expectation_results: [],
+    expect(response).to eq(response_type: :unstructured,
                            test_results: [],
+                           status: :passed,
                            feedback: '',
-                           response_type: :unstructured)
+                           expectation_results: [],
+                           result: ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n")
   end
 
   it 'answers a valid hash when submission is not ok' do
     response = bridge.
-        run_tests!(test: '',
+        run_tests!(test: '
+class TestFoo(unittest.TestCase):
+    def test_true(self):
+        self.assertFalse(foo())',
                    extra: '',
                    content: 'dsfsdf(asas',
                    expectations: []).
