@@ -3,7 +3,7 @@ class MetadataHook < Mumukit::Hook
     {language: {
         name: 'python',
         icon: {type: 'devicon', name: 'python'},
-        version: '3.5',
+        version: '2.7.6',
         extension: 'py',
         ace_mode: 'python'
     },
