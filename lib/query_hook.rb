@@ -1,4 +1,4 @@
-class QueryHook < Mumukit::Templates::FileHook
+class PythonQueryHook < Mumukit::Templates::FileHook
   isolated true
 
   def command_line(filename)

@@ -1,7 +1,7 @@
 require_relative 'spec_helper'
 
-describe TestHook do
-  let(:hook) { TestHook.new }
+describe PythonTestHook do
+  let(:hook) { PythonTestHook.new }
   let(:file) { hook.compile(request) }
   let!(:result) { hook.run!(file) }
 

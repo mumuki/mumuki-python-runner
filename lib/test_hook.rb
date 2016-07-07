@@ -1,4 +1,4 @@
-class TestHook < Mumukit::Templates::FileHook
+class PythonTestHook < Mumukit::Templates::FileHook
   isolated true
 
   def tempfile_extension

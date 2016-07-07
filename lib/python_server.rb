@@ -4,9 +4,9 @@ I18n.load_path += Dir[File.join('.', 'locales', '*.yml')]
 
 require 'mumukit'
 
+Mumukit.runner_name = 'python'
 Mumukit.configure do |config|
   config.docker_image = 'mumuki/mumuki-python-worker'
-  config.runner_name = 'python-server'
 end
 
 require_relative 'test_hook'
