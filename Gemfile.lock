@@ -20,8 +20,8 @@ GIT
 
 GIT
   remote: git://github.com/mumuki/mumukit.git
-  revision: e74a29eb63576f6991fda7fb7be2f846d5709cee
-  tag: v1.2.0
+  revision: 3343f1c7b1a8233a76b1575df77d037e6aa915d5
+  branch: feature-namespaced-runner
   specs:
     mumukit (1.2.0)
       activesupport

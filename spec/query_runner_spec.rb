@@ -2,9 +2,9 @@ require_relative 'spec_helper'
 require 'ostruct'
 require_relative '../lib/query_hook'
 
-describe QueryHook do
+describe PythonQueryHook do
 
-  let(:hook) { QueryHook.new }
+  let(:hook) { PythonQueryHook.new }
   let(:file) { hook.compile(request) }
   let!(:result) { hook.run!(file) }
 
