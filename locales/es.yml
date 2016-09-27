@@ -1,2 +1,0 @@
-es:
-  time_exceeded: 'Tiempo excedido: test abortado. ¿Puede que tengas algun predicado con recursion inifinta?'

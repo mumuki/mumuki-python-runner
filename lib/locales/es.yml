@@ -1,0 +1,2 @@
+es:
+  time_exceeded: 'Tiempo excedido: test abortado. ¿Puede que tengas alguna función o método con recursion inifinta?'
