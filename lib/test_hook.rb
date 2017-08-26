@@ -15,9 +15,17 @@ import unittest
 
 #{request.content}
 #{request.extra}
-#{request.test}
+#{test_class(request.test)}
+
 
 unittest.main()
+python
+  end
+
+  def test_class(test)
+    <<python
+class MumukiTest(unittest.TestCase):
+  #{test.gsub(/\n/,"\n\t")}
 python
   end
 end

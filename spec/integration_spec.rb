@@ -11,10 +11,8 @@ describe 'integration test' do
   after(:all) { Process.kill 'TERM', @pid }
 
   it 'answers a valid hash when submission is ok' do
-    response = bridge.run_tests!(test: '
-class TestFoo(unittest.TestCase):
-    def test_true(self):
-        self.assertFalse(foo())',
+    response = bridge.run_tests!(test: 'def test_true(self):
+    self.assertFalse(foo())',
                                  extra: '',
                                  content: "def foo():\n    return False\n",
                                  expectations: [])
@@ -30,9 +28,8 @@ class TestFoo(unittest.TestCase):
   it 'answers a valid hash when submission is not ok' do
     response = bridge.
         run_tests!(test: '
-class TestFoo(unittest.TestCase):
-    def test_true(self):
-        self.assertFalse(foo())',
+def test_true(self):
+    self.assertFalse(foo())',
                    extra: '',
                    content: 'dsfsdf(asas',
                    expectations: []).

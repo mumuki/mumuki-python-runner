@@ -8,22 +8,18 @@ describe PythonTestHook do
   context 'passes when test pass' do
     let(:request) { OpenStruct.new(content: '
 def foo():
-    return 4', test: '
-class TestFoo(unittest.TestCase):
-    def test_true(self):
-        self.assertTrue(True)
-') }
-    it { expect(result[1]).to eq :passed }
+  return 4', test: '
+def test_true(self):
+  self.assertTrue(True)') }
+    it { puts result; expect(result[1]).to eq :passed }
   end
 
   context 'fails when test fails' do
     let(:request) { OpenStruct.new(content: '
 def foo():
-    return 4', test: '
-class TestFoo(unittest.TestCase):
-    def test_true(self):
-        self.assertTrue(False)
-') }
+  return 4', test: '
+def test_true(self):
+  self.assertTrue(False)') }
     it { expect(result[1]).to eq :failed }
   end
 end
