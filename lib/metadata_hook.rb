@@ -9,7 +9,13 @@ class PythonMetadataHook < Mumukit::Hook
     },
      test_framework: {
          name: 'unittest',
-         test_extension: 'py'
+         test_extension: 'py',
+         template: <<python
+class Test(unittest.TestCase):
+
+  def test_description_example(self):
+    self.assertTrue(True)
+python
      }}
   end
 end
