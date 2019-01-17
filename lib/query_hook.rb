@@ -11,11 +11,17 @@ import string
 
 #{req.extra}
 #{req.content}
-
-print(string.Template("=> $result").substitute(result = #{req.query}))
+#{build_query req.query}
 python
   end
 
+  def build_query(query)
+    if query.match /print *(\(| ).*/
+      query
+    else
+      "print(string.Template(\"=> $result\").substitute(result = #{query}))"
+    end
+  end
 end
 
 
