@@ -30,13 +30,11 @@ python
 
   def post_process_file(_file, output, status)
     xml = output.split("Generating XML reports...\n").last
+    raise StandardError, 'No XML found' unless xml.start_with? '<?xml'
 
-    report = Nokogiri::XML(xml)
-    test_results = generate_test_results report
-
-    [test_results, status]
+    [generate_test_results(Nokogiri::XML(xml))]
   rescue
-    [result, :errored]
+    [output, :errored]
   end
 
   private
@@ -51,12 +49,14 @@ python
 
   def generate_test_results(report)
     report.xpath('//testcase').map {|test_case|
-      error = test_case.xpath('failure').attribute('message')
+      failure = test_case.xpath('failure', 'error')
+      error = failure.attribute('type')
+      message = failure.attribute('message')
 
       [
         format_test_name(test_case.attribute('name').to_s),
         error.nil? ? :passed: :failed,
-        error.to_s
+        error.nil? ? '' : "#{error}: #{message}"
       ]
     }
   end

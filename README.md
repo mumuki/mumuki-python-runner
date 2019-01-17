@@ -23,7 +23,6 @@ gem install bundler
 
 ```bash
 bundle install
-./bin/pull_worker.sh
 ```
 
 # Run tests
