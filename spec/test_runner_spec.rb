@@ -49,8 +49,7 @@ def foo():
 class MyTest(unittest.TestCase):
   def test_true(self):
     self.assertTrue(True)') }
-    it { expect(result[1]).to eq :passed }
-    it { expect(result[0]).to eq ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n" }
+    it { expect(result[0]).to match_array [['True', :passed, '']] }
   end
 
   context 'accepts multiple tests' do
@@ -62,7 +61,6 @@ def test_false(self):
 
 def test_true(self):
   self.assertTrue(True)') }
-    it { expect(result[1]).to eq :passed }
-    it { expect(result[0]).to eq "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n" }
+    it { expect(result[0]).to match_array [['False', :passed, ''], ['True', :passed, '']] }
   end
 end
