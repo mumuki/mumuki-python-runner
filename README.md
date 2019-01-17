@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/mumuki/mumuki-python-server.svg?branch=master)](https://travis-ci.org/mumuki/mumuki-python-server)
-[![Code Climate](https://codeclimate.com/github/mumuki/mumuki-python-server/badges/gpa.svg)](https://codeclimate.com/github/mumuki/mumuki-python-server)
-[![Test Coverage](https://codeclimate.com/github/mumuki/mumuki-python-server/badges/coverage.svg)](https://codeclimate.com/github/mumuki/mumuki-python-server)
+[![Build Status](https://travis-ci.org/mumuki/mumuki-python-runner.svg?branch=master)](https://travis-ci.org/mumuki/mumuki-python-runner)
+[![Code Climate](https://codeclimate.com/github/mumuki/mumuki-python-runner/badges/gpa.svg)](https://codeclimate.com/github/mumuki/mumuki-python-runner)
+[![Test Coverage](https://codeclimate.com/github/mumuki/mumuki-python-runner/badges/coverage.svg)](https://codeclimate.com/github/mumuki/mumuki-python-runner)
 
 # Run the server
 
