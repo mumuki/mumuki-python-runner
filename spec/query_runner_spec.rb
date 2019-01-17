@@ -18,11 +18,6 @@ describe PythonQueryHook do
     it { expect(result).to eq ["hello\n", :passed] }
   end
 
-  context 'passes when query is a single print with multiple spaces' do
-    let(:request) { struct query: 'print("hello")' }
-    it { expect(result).to eq ["hello\n", :passed] }
-  end
-
   context 'fails when query is a broken print' do
     let(:request) { struct query: 'print("hello"' }
     it { expect(result[1]).to eq :failed }
