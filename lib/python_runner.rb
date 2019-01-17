@@ -7,6 +7,7 @@ Mumukit.configure do |config|
   config.docker_image = 'mumuki/mumuki-python-worker'
 end
 
+require_relative 'version'
 require_relative 'test_hook'
 require_relative 'query_hook'
 require_relative 'metadata_hook'
