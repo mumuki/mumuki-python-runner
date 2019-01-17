@@ -23,6 +23,7 @@ python
   end
 
   def test_class(test)
+    return test if test =~ /class.*\( *unittest.TestCase *\) *:/
     <<python
 class MumukiTest(unittest.TestCase):
   #{test.gsub(/\n/,"\n\t")}

@@ -25,6 +25,26 @@ describe 'integration test' do
                            result: ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n")
   end
 
+
+  it 'answers a valid hash when submission is ok with a full-defined test' do
+    response = bridge.run_tests!(
+        test: '
+class TestFoo(unittest.TestCase):
+    def test_true(self):
+        self.assertFalse(foo())',
+        extra: '',
+        content: "def foo():\n    return False\n",
+        expectations: [])
+
+    expect(response).to eq(response_type: :unstructured,
+                           test_results: [],
+                           status: :passed,
+                           feedback: '',
+                           expectation_results: [],
+                           result: ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n")
+  end
+
+
   it 'answers a valid hash when submission is not ok' do
     response = bridge.
         run_tests!(test: '
