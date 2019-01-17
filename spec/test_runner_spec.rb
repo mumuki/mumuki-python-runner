@@ -1,6 +1,6 @@
 require_relative 'spec_helper'
 
-describe PythonTestHook do
+describe PythonTestHook, {solo:true} do
   let(:hook) { PythonTestHook.new }
   let(:file) { hook.compile(request) }
   let!(:result) { hook.run!(file) }
@@ -9,19 +9,19 @@ describe PythonTestHook do
     let(:request) { OpenStruct.new(content: '
 def foo():
   return 4', test: '
-def test_true(self):
+def test_true_is_true(self):
   self.assertTrue(True)') }
-    it { expect(result[1]).to eq :passed }
-    it { expect(result[0]).to eq ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n" }
+    it { expect(result[0]).to match_array [['True is true', :passed, '']] }
   end
 
   context 'fails when test fails' do
     let(:request) { OpenStruct.new(content: '
 def foo():
   return 4', test: '
-def test_true(self):
+def test_true_is_false(self):
   self.assertTrue(False)') }
     it { expect(result[1]).to eq :failed }
+    it { expect(result[0]).to match_array [['True is false', :failed, 'False is not true']] }
   end
 
   context 'accepts full-defined tests' do
