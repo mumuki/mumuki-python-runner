@@ -48,17 +48,19 @@ python
   end
 
   def generate_test_results(report)
-    report.xpath('//testcase').map {|test_case|
-      failure = test_case.xpath('failure', 'error')
-      error = failure.attribute('type')
-      message = failure.attribute('message')
+    report.xpath('//testcase').map(&method(:test_result))
+  end
 
-      [
+  def test_result(test_case)
+    failure = test_case.xpath('failure', 'error')
+    error = failure.attribute('type')
+    message = failure.attribute('message')
+
+    [
         format_test_name(test_case.attribute('name').to_s),
         error.nil? ? :passed: :failed,
         error.nil? ? '' : "#{error}: #{message}"
-      ]
-    }
+    ]
   end
 
   def format_test_name(name)
