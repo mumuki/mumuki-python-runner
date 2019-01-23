@@ -11,20 +11,19 @@ describe 'integration test' do
   after(:all) { Process.kill 'TERM', @pid }
 
   it 'answers a valid hash when submission is ok' do
-    response = bridge.run_tests!(test: 'def test_true(self):
+    response = bridge.run_tests!(test: 'def test_foo_returns_true(self):
     self.assertFalse(foo())',
                                  extra: '',
                                  content: "def foo():\n    return False\n",
                                  expectations: [])
 
-    expect(response).to eq(response_type: :unstructured,
-                           test_results: [],
+    expect(response).to eq(response_type: :structured,
+                           test_results: [{result: '', status: :passed, title: 'Foo returns true'}],
                            status: :passed,
                            feedback: '',
                            expectation_results: [],
-                           result: ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n")
+                           result: '')
   end
-
 
   it 'answers a valid hash when submission is ok with a full-defined test' do
     response = bridge.run_tests!(
@@ -36,29 +35,49 @@ class TestFoo(unittest.TestCase):
         content: "def foo():\n    return False\n",
         expectations: [])
 
-    expect(response).to eq(response_type: :unstructured,
-                           test_results: [],
+    expect(response).to eq(response_type: :structured,
+                           test_results: [{result: '', status: :passed, title: 'True'}],
                            status: :passed,
                            feedback: '',
                            expectation_results: [],
-                           result: ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n")
+                           result: '')
   end
 
 
   it 'answers a valid hash when submission is not ok' do
     response = bridge.
         run_tests!(test: '
-def test_true(self):
+def test_foo_returns_false(self):
     self.assertFalse(foo())',
                    extra: '',
-                   content: 'dsfsdf(asas',
+                   content: '',
                    expectations: []).
         reject { |k, _v| k == :result }
 
     expect(response).to eq(status: :failed,
                            expectation_results: [],
                            feedback: '',
+                           test_results: [{result: "NameError: global name 'foo' is not defined", status: :failed, title: 'Foo returns false'}],
+                           response_type: :structured)
+  end
+
+  it 'answers a valid hash when submission has syntax errors' do
+    response = bridge.
+        run_tests!(test: '
+def test_foo_returns_false(self):
+    self.assertFalse(foo())',
+                   extra: '',
+                   content: 'no#COMPILA!"',
+                   expectations: [])
+
+    expect(response).to eq(status: :errored,
+                           expectation_results: [],
+                           feedback: '',
                            test_results: [],
+                           result: "Traceback (most recent call last):\n" +
+                                   "  File \"solution.py\", line 5, in <module>\n" +
+                                   "    no#COMPILA!\"\n" +
+                                   "NameError: name 'no' is not defined\n",
                            response_type: :unstructured)
   end
 

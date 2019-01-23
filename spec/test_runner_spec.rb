@@ -9,19 +9,36 @@ describe PythonTestHook do
     let(:request) { OpenStruct.new(content: '
 def foo():
   return 4', test: '
-def test_true(self):
+def test_true_is_true(self):
   self.assertTrue(True)') }
-    it { expect(result[1]).to eq :passed }
-    it { expect(result[0]).to eq ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n" }
+    it { expect(result[0]).to match_array [['True is true', :passed, '']] }
   end
 
   context 'fails when test fails' do
     let(:request) { OpenStruct.new(content: '
 def foo():
   return 4', test: '
-def test_true(self):
+def test_true_is_false(self):
   self.assertTrue(False)') }
-    it { expect(result[1]).to eq :failed }
+    it { expect(result[0]).to match_array [['True is false', :failed, 'AssertionError: False is not true']] }
+  end
+
+  context 'fails when some test pass and other fail' do
+    let(:request) { OpenStruct.new(content: '
+def foo():
+  return 4', test: '
+def test_ruby_is_python(self):
+  self.assertEquals("ruby", "python")
+def test_true_is_true(self):
+  self.assertTrue(True)
+def test_false_is_true(self):
+  self.assertTrue(False, True)
+') }
+    it { expect(result[0]).to match_array [
+                                              ['Ruby is python', :failed, "AssertionError: 'ruby' != 'python'"],
+                                              ['True is true', :passed, ''],
+                                              ['False is true', :failed, 'AssertionError: True'],
+                                          ] }
   end
 
   context 'accepts full-defined tests' do
@@ -32,8 +49,7 @@ def foo():
 class MyTest(unittest.TestCase):
   def test_true(self):
     self.assertTrue(True)') }
-    it { expect(result[1]).to eq :passed }
-    it { expect(result[0]).to eq ".\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n" }
+    it { expect(result[0]).to match_array [['True', :passed, '']] }
   end
 
   context 'accepts multiple tests' do
@@ -45,7 +61,6 @@ def test_false(self):
 
 def test_true(self):
   self.assertTrue(True)') }
-    it { expect(result[1]).to eq :passed }
-    it { expect(result[0]).to eq "..\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n" }
+    it { expect(result[0]).to match_array [['False', :passed, ''], ['True', :passed, '']] }
   end
 end
