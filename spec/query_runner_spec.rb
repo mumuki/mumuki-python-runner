@@ -49,7 +49,7 @@ describe PythonQueryHook do
   end
 
   context 'does not redo prints in cookie' do
-    let(:request) { struct query: 'print "foo"', cookie: ['print bar'] }
+    let(:request) { struct query: 'print "foo"', cookie: ['print "bar"'] }
     it { expect(result).to eq ["foo\n", :passed] }
   end
 
