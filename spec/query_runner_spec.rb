@@ -57,4 +57,20 @@ describe PythonQueryHook do
     let(:request) { struct query: 'print "foo"', cookie: ['raise(Exception("bar"))'] }
     it { expect(result).to eq ["foo\n", :passed] }
   end
+
+  context 'responds with errored when query has a syntax error' do
+    let(:request) { struct query: '!' }
+    it { expect(result[0]).to eq %q{print(string.Template("=> $result").substitute(result = !))
+                                                            ^
+SyntaxError: invalid syntax} }
+    it { expect(result[1]).to eq :errored }
+  end
+
+  context 'responds with errored when query has an indentation error' do
+    let(:request) { struct query: ' print "123"' }
+    it { expect(result[0]).to eq %q{print "123"
+    ^
+IndentationError: unexpected indent} }
+    it { expect(result[1]).to eq :errored }
+  end
 end
