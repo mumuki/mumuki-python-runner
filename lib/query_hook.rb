@@ -1,4 +1,5 @@
 class PythonQueryHook < Mumukit::Templates::FileHook
+  with_error_patterns
   isolated true
 
   def command_line(filename)
@@ -39,6 +40,16 @@ python
 
   def compile_cookie(cookie)
     build_state(cookie).join("\n")
+  end
+
+  def error_patterns
+    [
+      Mumukit::ErrorPattern::Errored.new(syntax_error_regexp)
+    ]
+  end
+
+  def syntax_error_regexp
+    /\A  File .*\n(?m)(?=.*(SyntaxError|IndentationError))/
   end
 end
 
