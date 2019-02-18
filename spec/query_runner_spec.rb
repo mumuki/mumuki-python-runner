@@ -20,7 +20,7 @@ describe PythonQueryHook do
 
   context 'fails when query is a broken print' do
     let(:request) { struct query: 'print("hello"' }
-    it { expect(result[1]).to eq :failed }
+    it { expect(result[1]).to eq :errored }
   end
 
   context 'passes when query is a single 2-style print' do
