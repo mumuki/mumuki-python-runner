@@ -13,6 +13,16 @@ describe PythonQueryHook do
     it { expect(result).to eq ["=> 9\n", :passed] }
   end
 
+  context 'passes when standalone query is valid and returns a string.' do
+    let(:request) { struct query: '"foo"' }
+    it { expect(result).to eq ["=> foo\n", :passed] }
+  end
+
+  context 'passes when standalone query is valid and has utf8 chars.' do
+    let(:request) { struct query: '"fó" + "ò"' }
+    it { expect(result).to eq ["=> fóò\n", :passed] }
+  end
+
   context 'passes when query is a single print' do
     let(:request) { struct query: 'print("hello")' }
     it { expect(result).to eq ["hello\n", :passed] }

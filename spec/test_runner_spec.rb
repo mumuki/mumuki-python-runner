@@ -14,6 +14,15 @@ def test_true_is_true(self):
     it { expect(result[0]).to match_array [['True is true', :passed, '']] }
   end
 
+  context 'passes when test pass and there are utf8 chars' do
+    let(:request) { OpenStruct.new(content: '
+def foo():
+  return "fóò"', test: '
+def test_true_is_true(self):
+  self.assertEqual(foo(), "fóò")') }
+    it { expect(result[0]).to match_array [['True is true', :passed, '']] }
+  end
+
   context 'fails when test fails' do
     let(:request) { OpenStruct.new(content: '
 def foo():
