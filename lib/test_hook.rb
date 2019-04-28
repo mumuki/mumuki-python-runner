@@ -6,7 +6,7 @@ class PythonTestHook < Mumukit::Templates::FileHook
   end
 
   def command_line(filename)
-    "python #{filename}"
+    "rununittest #{filename}"
   end
 
   def compile_file_content(request)
@@ -20,7 +20,7 @@ import sys
 #{test_class(request.test)}
 
 unittest.main(
-  testRunner=xmlrunner.XMLTestRunner(output=sys.__stdout__),
+  testRunner=xmlrunner.XMLTestRunner(output='./xml-unittest-output'),
   failfast=False,
   buffer=False,
   catchbreak=False

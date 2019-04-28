@@ -57,7 +57,7 @@ def test_foo_returns_false(self):
     expect(response).to eq(status: :failed,
                            expectation_results: [],
                            feedback: '',
-                           test_results: [{result: "NameError: global name 'foo' is not defined", status: :failed, title: 'Foo returns false'}],
+                           test_results: [{result: "NameError: name 'foo' is not defined", status: :failed, title: 'Foo returns false'}],
                            response_type: :structured)
   end
 

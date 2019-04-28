@@ -32,12 +32,12 @@ def test_ruby_is_python(self):
 def test_true_is_true(self):
   self.assertTrue(True)
 def test_false_is_true(self):
-  self.assertTrue(False, True)
+  self.assertTrue(False)
 ') }
     it { expect(result[0]).to match_array [
-                                              ['Ruby is python', :failed, "AssertionError: 'ruby' != 'python'"],
+                                              ['Ruby is python', :failed, "AssertionError: 'ruby' != 'python' - ruby + python "],
                                               ['True is true', :passed, ''],
-                                              ['False is true', :failed, 'AssertionError: True'],
+                                              ['False is true', :failed, 'AssertionError: False is not true'],
                                           ] }
   end
 

@@ -1,0 +1,4 @@
+#!/bin/sh
+
+python $1
+cat xml-unittest-output/*
