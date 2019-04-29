@@ -11,6 +11,8 @@ class BasePythonTestHook < Mumukit::Templates::FileHook
 
   def compile_file_content(request)
     <<python
+# -*- coding: UTF-8 -*-
+
 import unittest
 import xmlrunner
 import sys
