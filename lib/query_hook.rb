@@ -8,6 +8,7 @@ class PythonQueryHook < Mumukit::Templates::FileHook
 
   def compile_file_content(req)
     <<python
+# -*- coding: UTF-8 -*-
 import string, sys, os
 
 #{req.extra}
