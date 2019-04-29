@@ -28,6 +28,19 @@ class MyTest(unittest.TestCase):
     it { expect(result[0]).to match_array [['True', :passed, '']] }
   end
 
+  context 'works when there are not tests' do
+    let(:request) { struct(content: '
+def foo():
+  return 4', test: '
+
+class MyTest(unittest.TestCase):
+  pass') }
+    it do
+      expect(result[0]).to include 'Ran 0 tests'
+      expect(result[1]).to eq :errored
+    end
+  end
+
   context 'accepts multiple tests' do
     let(:request) { struct(content: '
 def foo():
@@ -41,7 +54,7 @@ def test_true(self):
   end
 
   context 'passes when test pass and there are utf8 chars' do
-    let(:request) { OpenStruct.new(content: '
+    let(:request) { struct(content: '
 def foo():
   return "fóò"', test: '
 def test_true_is_true(self):
