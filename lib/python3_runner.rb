@@ -14,4 +14,5 @@ reload_python3_runner!
 require_relative './python3/version'
 require_relative './python3/test_hook'
 require_relative './python3/query_hook'
+require_relative './python3/expectations_hook'
 require_relative './python3/metadata_hook'
