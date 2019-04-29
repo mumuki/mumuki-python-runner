@@ -1,9 +1,9 @@
-class PythonMetadataHook < Mumukit::Hook
+class BasePythonMetadataHook < Mumukit::Hook
   def metadata
     {language: {
         name: 'python',
         icon: {type: 'devicon', name: 'python'},
-        version: '2.7.6',
+        version: version,
         extension: 'py',
         ace_mode: 'python'
     },
@@ -18,4 +18,6 @@ class Test(unittest.TestCase):
 python
      }}
   end
+
+  required :version
 end

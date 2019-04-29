@@ -1,4 +1,4 @@
-class PythonQueryHook < Mumukit::Templates::FileHook
+class BasePythonQueryHook < Mumukit::Templates::FileHook
   with_error_patterns
   isolated true
 

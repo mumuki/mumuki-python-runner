@@ -1,12 +1,14 @@
-require_relative 'spec_helper'
+require_relative './spec_helper'
 
-describe PythonTestHook do
-  let(:hook) { PythonTestHook.new }
+describe Python3TestHook do
+  before(:all) { reload_python3_runner! }
+
+  let(:hook) { Python3TestHook.new }
   let(:file) { hook.compile(request) }
   let!(:result) { hook.run!(file) }
 
   context 'passes when test pass' do
-    let(:request) { OpenStruct.new(content: '
+    let(:request) { struct(content: '
 def foo():
   return 4', test: '
 def test_true_is_true(self):
@@ -15,7 +17,7 @@ def test_true_is_true(self):
   end
 
   context 'fails when test fails' do
-    let(:request) { OpenStruct.new(content: '
+    let(:request) { struct(content: '
 def foo():
   return 4', test: '
 def test_true_is_false(self):
@@ -24,7 +26,7 @@ def test_true_is_false(self):
   end
 
   context 'fails when some test pass and other fail' do
-    let(:request) { OpenStruct.new(content: '
+    let(:request) { struct(content: '
 def foo():
   return 4', test: '
 def test_ruby_is_python(self):
@@ -42,7 +44,7 @@ def test_false_is_true(self):
   end
 
   context 'accepts full-defined tests' do
-    let(:request) { OpenStruct.new(content: '
+    let(:request) { struct(content: '
 def foo():
   return 4', test: '
 
@@ -53,7 +55,7 @@ class MyTest(unittest.TestCase):
   end
 
   context 'accepts multiple tests' do
-    let(:request) { OpenStruct.new(content: '
+    let(:request) { struct(content: '
 def foo():
   return 4', test: '
 def test_false(self):

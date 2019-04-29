@@ -1,4 +1,4 @@
-FROM python:3.7-alpine
+FROM python:3.7.3-alpine
 MAINTAINER Franco Leonardo Bulgarelli
 
 RUN wget https://github.com/xmlrunner/unittest-xml-reporting/archive/master.zip && \
