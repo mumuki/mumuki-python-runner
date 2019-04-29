@@ -14,7 +14,7 @@ cd mumuki-python-runner
 ## Install global dependencies
 
 ```bash
-rbenv install 2.3.1
+rbenv install 2.6.3
 rbenv rehash
 gem install bundler
 ```
@@ -28,21 +28,34 @@ bundle install
 # Run tests
 
 ```bash
-bundle exec rake
+bundle exec rspec
 ```
 
 # Run the server
 
 ```bash
-RACK_ENV=development bundle exec rackup -p 4000 --host 0.0.0.0
+bundle exec rackup
 ```
 
-# Deploy docker image
+The previous command runs python 2 by default. However can run it explicitly this way:
 
 ```bash
-cd worker/
-# docker login
-docker rmi mumuki/mumuki-python-worker
-docker build -t mumuki/mumuki-python-worker .
-docker push mumuki/mumuki-python-worker
+bundle exec rackup config2.ru
+```
+
+You can run python 3 this way:
+
+```bash
+bundle exec rackup config3.ru
+```
+
+
+# Deploy docker images
+
+```bash
+docker login
+
+./build_worker.sh
+docker push mumuki/mumuki-python2-worker:<CURRENT_VERSION>
+docker push mumuki/mumuki-python3-worker:<CURRENT_VERSION>
 ```

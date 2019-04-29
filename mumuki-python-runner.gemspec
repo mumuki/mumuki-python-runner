@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'version'
+require 'base/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'mumuki-python-runner'
-  spec.version       = PythonVersionHook::VERSION
+  spec.version       = BasePythonVersionHook::VERSION
   spec.authors       = ['Franco Leonardo Bulgarelli']
   spec.email         = ['franco@mumuki.org']
   spec.summary       = 'Python Runner for Mumuki'

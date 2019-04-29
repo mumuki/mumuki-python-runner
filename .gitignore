@@ -3,3 +3,7 @@ escualo_rsa.pub
 
 .idea
 Gemfile.lock
+
+*.pyc
+worker2/rununittest
+worker3/rununittest

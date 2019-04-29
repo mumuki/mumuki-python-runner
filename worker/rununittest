@@ -1,0 +1,4 @@
+#!/bin/sh
+
+python $1
+test -e xml-unittest-output && touch xml-unittest-output/empty && cat xml-unittest-output/*
