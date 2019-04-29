@@ -1,4 +1,4 @@
 #!/bin/sh
 
 python $1
-cat xml-unittest-output/*
+test -e xml-unittest-output && cat xml-unittest-output/*
