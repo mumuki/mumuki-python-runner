@@ -93,8 +93,10 @@ shared_examples 'common python expectations hook' do
 
   describe 'Raises' do
     let(:code) { "raise Exception('foo')" }
-    let(:expectations) { [{binding: '*', inspection: 'Raises:Exception'}] }
+    let(:expectations) { [
+      {binding: '*', inspection: 'Raises:Exception'},
+      {binding: '*', inspection: 'Raises:Error'} ] }
 
-    it { expect(result).to eq [{expectation: expectations[0], result: true}] }
+    it { expect(result).to eq [{expectation: expectations[0], result: true}, {expectation: expectations[1], result: false}] }
   end
 end

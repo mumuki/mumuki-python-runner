@@ -1,5 +1,5 @@
 class Python3ExpectationsHook < BasePythonExpectationsHook
   def language
-    'Python'
+    'Python3'
   end
 end

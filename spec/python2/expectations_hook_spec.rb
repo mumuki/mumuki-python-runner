@@ -1,7 +1,7 @@
 require_relative './spec_helper'
 
 describe Python2ExpectationsHook do
-  let(:runner) { Python3ExpectationsHook.new }
+  let(:runner) { Python2ExpectationsHook.new }
   let(:result) { runner.run!(runner.compile(struct(expectations: expectations, content: code))) }
 
   it_behaves_like 'common python expectations hook'
