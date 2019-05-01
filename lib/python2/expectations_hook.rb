@@ -3,3 +3,5 @@ class Python2ExpectationsHook < BasePythonExpectationsHook
     'Python2'
   end
 end
+
+PythonExpectationsHook = Python2ExpectationsHook

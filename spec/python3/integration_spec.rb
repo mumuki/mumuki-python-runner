@@ -29,6 +29,33 @@ def test_foo_returns_false(self):
                            response_type: :structured)
   end
 
+  it 'answers a valid hash when submission presents version-specific expectations and behaviour' do
+    response = bridge.run_tests!(
+        test: '
+class TestFoo(unittest.TestCase):
+    def test_map_returns_map(self):
+        self.assertNotEqual(foo(), [1, 2, 3])',
+        extra: '',
+        content: "print('hello')\ndef foo():\n    return map(lambda x: x+1, range(0, 3))\n",
+        expectations: [
+          {binding: '*', inspection: 'Declares:foo'},
+          {binding: 'foo', inspection: 'UsesLambda'},
+          {binding: '*', inspection: 'Declares:bar'}
+        ])
+
+    expect(response).to eq(response_type: :structured,
+                           test_results: [{title: "Map returns map", status: :passed, result: ""}],
+                           status: :passed_with_warnings,
+                           feedback: '',
+                           expectation_results: [
+                             {binding: '*', inspection: 'Declares:foo', result: :passed},
+                             {binding: 'foo', inspection: 'UsesLambda', result: :passed},
+                             {binding: '*', inspection: 'Declares:bar', result: :failed},
+                             {binding: '*', inspection: 'DoesConsolePrint', result: :failed}
+                           ],
+                           result: '')
+  end
+
 
   it 'exposes python version' do
     expect(bridge.info['language']).to include('version' => '3.7.3')
