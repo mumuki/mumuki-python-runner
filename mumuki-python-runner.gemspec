@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['Franco Leonardo Bulgarelli']
   spec.email         = ['franco@mumuki.org']
   spec.summary       = 'Python Runner for Mumuki'
-  spec.homepage      = 'http://github.com/mumuki/mumuki-python-server'
+  spec.homepage      = 'http://github.com/mumuki/mumuki-python-runner'
   spec.license       = 'MIT'
 
   spec.files         = Dir['lib/**/**']
