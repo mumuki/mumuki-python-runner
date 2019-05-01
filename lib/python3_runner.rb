@@ -4,6 +4,8 @@ def reload_python3_runner!
   Mumukit.runner_name = 'python3'
   Mumukit.configure do |config|
     config.docker_image = 'mumuki/mumuki-python3-worker:0.1'
+    config.comment_type = Mumukit::Directives::CommentType::Ruby
+    config.structured = true
     config.stateful = true
   end
 end

@@ -76,4 +76,8 @@ def test_foo_returns_false(self):
     expect(response[:status]).to eq(:failed)
     expect(response[:result]).to include('maximum recursion depth exceeded')
   end
+
+  it 'exposes runner as structured' do
+    expect(bridge.info['features']).to include('structured' => true)
+  end
 end

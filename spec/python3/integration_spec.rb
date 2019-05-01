@@ -33,4 +33,8 @@ def test_foo_returns_false(self):
   it 'exposes python version' do
     expect(bridge.info['language']).to include('version' => '3.7.3')
   end
+
+  it 'exposes ruby comment type' do
+    expect(bridge.info['comment_type']).to eq('ruby')
+  end
 end
