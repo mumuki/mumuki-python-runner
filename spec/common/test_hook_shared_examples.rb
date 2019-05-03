@@ -61,4 +61,14 @@ def test_true_is_true(self):
   self.assertEqual(foo(), "fóò")') }
     it { expect(result[0]).to match_array [['True is true', :passed, '']] }
   end
+
+  context 'loads extra before content' do
+    let(:request) { struct(content: '
+foo()', test: '
+def test_false(self):
+  self.assertFalse(False)', extra: '
+def foo():
+  pass') }
+    it { expect(result[0]).to match_array [['False', :passed, '']] }
+  end
 end

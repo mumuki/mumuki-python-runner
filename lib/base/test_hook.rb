@@ -17,8 +17,8 @@ import unittest
 import xmlrunner
 import sys
 
-#{request.content}
 #{request.extra}
+#{request.content}
 #{test_class(request.test)}
 
 unittest.main(
