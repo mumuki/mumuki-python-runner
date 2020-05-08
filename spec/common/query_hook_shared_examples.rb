@@ -51,8 +51,8 @@ shared_examples "common python query hook" do
 
   context 'responds with errored when query has a syntax error' do
     let(:request) { struct query: '!' }
-    it { expect(result[0]).to eq %q{print(string.Template("=> $result").substitute(result = !))
-                                                            ^
+    it { expect(result[0]).to eq %q{print(string.Template("=> $__mumuki_query_result__").substitute(__mumuki_query_result__ = !))
+                                                                                              ^
 SyntaxError: invalid syntax} }
     it { expect(result[1]).to eq :errored }
   end
