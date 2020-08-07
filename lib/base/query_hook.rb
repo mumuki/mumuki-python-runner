@@ -23,11 +23,11 @@ sys.stdout = sys.__stdout__
 python
   end
 
-  def compile_query(query, output_prefix = "=> ", output_var = "__mumuki_query_result__")
-    if query.match /print *(\(| ).*|^[a-zA-Z_]\w*\s*=.*|^raise\b/
+  def compile_query(query, output_prefix = "=> ")
+    if query.match /print *(\(| ).*|^[a-zA-Z_]\w*\s*=[^=].*|^raise\b/
       query
     else
-      "print(string.Template(\"#{output_prefix}$#{output_var}\").substitute(#{output_var} = #{query}))"
+      "print(string.Template(\"#{output_prefix}\${mumuki_query_result}\").safe_substitute(mumuki_query_result = #{query}))"
     end
   end
 

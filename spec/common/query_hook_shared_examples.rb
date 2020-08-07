@@ -34,6 +34,16 @@ shared_examples "common python query hook" do
     it { expect(result).to eq ["", :passed] }
   end
 
+  context 'properly replaces variables when result is number' do
+    let(:request) { struct query: 'x', cookie: ['x = 4'] }
+    it { expect(result).to eq ["=> 4\n", :passed] }
+  end
+
+  context 'properly replaces variables when result is boolean' do
+    let(:request) { struct query: 'x == 4', cookie: ['x = 4'] }
+    it { expect(result).to eq ["=> True\n", :passed] }
+  end
+
   context 'is stateful' do
     let(:request) { struct query: 'print(foo)', cookie: ['foo = 123'] }
     it { expect(result).to eq ["123\n", :passed] }
@@ -51,8 +61,8 @@ shared_examples "common python query hook" do
 
   context 'responds with errored when query has a syntax error' do
     let(:request) { struct query: '!' }
-    it { expect(result[0]).to eq %q{print(string.Template("=> $__mumuki_query_result__").substitute(__mumuki_query_result__ = !))
-                                                                                              ^
+    it { expect(result[0]).to eq %q{print(string.Template("=> ${mumuki_query_result}").safe_substitute(mumuki_query_result = !))
+                                                                                             ^
 SyntaxError: invalid syntax} }
     it { expect(result[1]).to eq :errored }
   end

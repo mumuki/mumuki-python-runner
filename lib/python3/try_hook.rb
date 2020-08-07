@@ -13,7 +13,7 @@ class Python3TryHook < Mumukit::Templates::TryHook
 print("#{query_separator}");
 #{query_hook.compile_query(r.query, '')}
 print("#{goal_separator}");
-#{query_hook.compile_query(r.goal.indifferent_get(:query) || 'None', '', '__mumuki_goal_query_result__')}
+#{query_hook.compile_query(r.goal.indifferent_get(:query) || 'None', '')}
 python
   end
 
