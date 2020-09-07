@@ -27,7 +27,18 @@ python
     if query.match /print *(\(| ).*|^[a-zA-Z_]\w*\s*=[^=].*|^raise\b/
       query
     else
-      "print(string.Template(\"#{output_prefix}\${mumuki_query_result}\").safe_substitute(mumuki_query_result = #{query}))"
+      <<~python
+        __mumuki_error__ = None
+        try:
+          __mumuki_args__ = {'mumuki_query_result': eval("""#{query.gsub('"', '\"')}""")}
+          print(string.Template(\"#{output_prefix}\${mumuki_query_result}\").safe_substitute(**__mumuki_args__))
+        except SyntaxError as e:
+          __mumuki_error__ = SyntaxError(e.msg, ('<console>', e.lineno, e.offset, e.text))
+        if __mumuki_error__:
+          print(__mumuki_error__.text)
+          print(" "*(__mumuki_error__.offset - 1) + "^")
+          print('SyntaxError:', __mumuki_error__)
+      python
     end
   end
 
@@ -53,7 +64,7 @@ python
   end
 
   def syntax_error_regexp
-    /\A  File .*\n(?m)(?=.*(SyntaxError|IndentationError))/
+    /(SyntaxError: )|(\A  File .*\n(?m)(?=.*(SyntaxError|IndentationError)))/
   end
 end
 
