@@ -37,7 +37,8 @@ python
         if __mumuki_error__:
           print(__mumuki_error__.text)
           print(" "*(__mumuki_error__.offset - 1) + "^")
-          print('SyntaxError:', __mumuki_error__)
+          print('SyntheticMumukiSyntaxError: SyntaxError: ' + str(__mumuki_error__))
+          exit(1)
       python
     end
   end
@@ -64,7 +65,7 @@ python
   end
 
   def syntax_error_regexp
-    /(SyntaxError: )|(\A  File .*\n(?m)(?=.*(SyntaxError|IndentationError)))/
+    /(SyntheticMumukiSyntaxError: )|(\A  File .*\n(?m)(?=.*(SyntaxError|IndentationError)))/
   end
 end
 
