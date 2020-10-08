@@ -34,6 +34,27 @@ shared_examples "common python query hook" do
     it { expect(result).to eq ["", :passed] }
   end
 
+  context 'passes when query is an assignment to an object' do
+    let(:request) { struct query: "x.a = 123", cookie: ['class X: pass', 'x = X()'] }
+    it { expect(result).to eq ["", :passed] }
+  end
+
+  context 'passes when query is an assignment to a list' do
+    let(:request) { struct query: "x[1] = 123", cookie: ['x = [1, 3, 8]'] }
+    it { expect(result).to eq ["", :passed] }
+  end
+
+  context 'passes when query is an assignment with increment' do
+    let(:request) { struct query: "x += 123", cookie: ['x = 0'] }
+    it { expect(result).to eq ["", :passed] }
+  end
+
+
+  context 'passes when query is an assignment to a dict' do
+    let(:request) { struct query: "x['a'] = 123", cookie: ['x = {}'] }
+    it { expect(result).to eq ["", :passed] }
+  end
+
   context 'properly replaces variables when result is number' do
     let(:request) { struct query: 'x', cookie: ['x = 4'] }
     it { expect(result).to eq ["=> 4\n", :passed] }

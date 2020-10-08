@@ -24,7 +24,7 @@ python
   end
 
   def compile_query(query, output_prefix = "=> ")
-    if query.match /print *(\(| ).*|^[a-zA-Z_]\w*\s*=[^=].*|^raise\b/
+    if query.match /print *(\(| ).*|.*[^=]=[^=].*|^raise\b/
       query
     else
       <<~python
