@@ -17,8 +17,7 @@ jobs:
       run: bundle install
     - name: Pull worker
       run: |
-        docker pull mumuki/mumuki-python2-worker:0.1
-        docker pull mumuki/mumuki-python3-worker:0.1
+        bin/pull_worker.sh
     - name: Run tests
       run: bundle exec rake
     - name: Deploy
