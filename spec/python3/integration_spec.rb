@@ -56,6 +56,44 @@ class TestFoo(unittest.TestCase):
                            result: '')
   end
 
+  it 'answers a valid hash when submitting an interactive query that passes' do
+    response = bridge.run_try!(
+        query: '5 in [1, 2, 4]',
+        cookie: [
+          '4 in [1, 2, 4]',
+          '5 in [1, 2, 3]',
+        ],
+        goal: {
+          kind: 'queries_match',
+          regexps: [
+            '\W*4\W*in\W*\[\W*1\W*,\W*2\W*,\W*4\W*\]',
+            '\W*5\W*in\W*\[\W*1\W*,\W*2\W*,\W*4\W*\]'
+          ]
+        })
+    expect(response).to eq(status: :passed,
+                           query_result: {result: "False", status: :passed},
+                           result: "goal was met successfully")
+  end
+
+  it 'answers a valid hash when submitting an interactive query that fails' do
+    response = bridge.run_try!(
+        query: '3 in [1, 2, 3]',
+        cookie: [
+          '4 in [1, 2, 4]',
+          '5 in [1, 2, 3]',
+        ],
+        goal: {
+          kind: 'queries_match',
+          regexps: [
+            '\W*4\W*in\W*\[\W*1\W*,\W*2\W*,\W*4\W*\]',
+            '\W*5\W*in\W*\[\W*1\W*,\W*2\W*,\W*4\W*\]'
+          ]
+        })
+    expect(response).to eq(status: :failed,
+                           query_result: {result: "True", status: :passed},
+                           result: 'All the required queries must be executed')
+  end
+
 
   it 'exposes python version' do
     expect(bridge.info['language']).to include('version' => '3.7.3')
