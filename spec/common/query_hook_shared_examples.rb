@@ -9,16 +9,6 @@ shared_examples "common python query hook" do
     it { expect(result).to eq ["  File \"<input>\", line 1, in <module>\n ZeroDivisionError: division by zero\n\n", :failed] }
   end
 
-  context 'passes when standalone query is valid and returns a string.' do
-    let(:request) { struct query: '"foo"' }
-    it { expect(result).to eq ["'foo'\n", :passed] }
-  end
-
-  context 'passes when standalone query is valid and has utf8 chars.' do
-    let(:request) { struct query: '"fó" + "ò"' }
-    it { expect(result).to eq ["'fóò'\n", :passed] }
-  end
-
   context 'passes when query is a single print' do
     let(:request) { struct query: 'print("hello")' }
     it { expect(result).to eq ["hello\n", :passed] }
@@ -36,27 +26,27 @@ shared_examples "common python query hook" do
 
   context 'passes when query is an == comparison' do
     let(:request) { struct query: '123 == 123' }
-    it { expect(result).to eq ["=> True\n", :passed] }
+    it { expect(result).to eq ["True\n", :passed] }
   end
 
   context 'passes when query is an > comparison' do
     let(:request) { struct query: '123 > 123' }
-    it { expect(result).to eq ["=> False\n", :passed] }
+    it { expect(result).to eq ["False\n", :passed] }
   end
 
   context 'passes when query is an <= comparison' do
     let(:request) { struct query: '123 <= 123' }
-    it { expect(result).to eq ["=> True\n", :passed] }
+    it { expect(result).to eq ["True\n", :passed] }
   end
 
   context 'passes when query is an != comparison' do
     let(:request) { struct query: '123 != 123' }
-    it { expect(result).to eq ["=> False\n", :passed] }
+    it { expect(result).to eq ["False\n", :passed] }
   end
 
   context 'passes when query is an >= comparison' do
     let(:request) { struct query: '123 >= 123' }
-    it { expect(result).to eq ["=> True\n", :passed] }
+    it { expect(result).to eq ["True\n", :passed] }
   end
 
   context 'passes when query is an assignment' do

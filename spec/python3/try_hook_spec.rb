@@ -12,13 +12,13 @@ describe Python3TryHook do
     context 'and query that matches' do
       let(:request) { struct query: '"something"', goal: goal }
       it { expect(result[1]).to eq :passed }
-      it { expect(result[2][:result]).to eq 'something' }
+      it { expect(result[2][:result]).to eq "'something'" }
     end
 
     context 'and query that does not match' do
       let(:request) { struct query: '"somethingElse"', goal: goal }
       it { expect(result[1]).to eq :failed }
-      it { expect(result[2][:result]).to eq 'somethingElse' }
+      it { expect(result[2][:result]).to eq "'somethingElse'" }
     end
   end
 
@@ -115,7 +115,7 @@ describe Python3TryHook do
     context 'and query that does not make said query pass' do
       let(:request) { struct query: '', goal: goal }
       it { expect(result[1]).to eq :passed }
-      it { expect(result[2][:result]).to be nil }
+      it { expect(result[2][:result]).to eq '' }
     end
   end
 
@@ -131,7 +131,7 @@ describe Python3TryHook do
     context 'and query that does not make said query pass' do
       let(:request) { struct query: '', goal: goal }
       it { expect(result[1]).to eq :failed }
-      it { expect(result[2][:result]).to be nil }
+      it { expect(result[2][:result]).to eq '' }
     end
   end
 

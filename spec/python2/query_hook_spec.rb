@@ -31,4 +31,15 @@ describe Python2QueryHook do
     let(:request) { struct query: 'raise Exception, "bar"' }
     it { expect(result[1]).to eq :failed }
   end
+
+  context 'passes when standalone query is valid and returns a string.' do
+    let(:request) { struct query: '"foo"' }
+    it { expect(result).to eq ["foo\n", :passed] }
+  end
+
+  context 'passes when standalone query is valid and has utf8 chars.' do
+    let(:request) { struct query: '"fó" + "ò"' }
+    it { expect(result).to eq ["fóò\n", :passed] }
+  end
+
 end
