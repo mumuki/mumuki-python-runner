@@ -42,4 +42,20 @@ describe Python2QueryHook do
     it { expect(result).to eq ["fóò\n", :passed] }
   end
 
+  context 'passes when standalone query fails.' do
+    let(:request) { struct query: '0 / 0' }
+    it { expect(result[0]).to include 'ZeroDivisionError: integer division or modulo by zero' }
+    it { expect(result[1]).to eq :failed }
+  end
+
+  context 'responds with errored when query has a syntax error' do
+    let(:request) { struct query: '!' }
+    it { expect(result[0]).to eq %Q{!\n^\nSyntaxError: unexpected EOF while parsing (<console>, line 1)} }
+    it { expect(result[1]).to eq :errored }
+  end
+
+  context 'fails when query is an incomplete print' do
+    let(:request) { struct query: 'print("hello"' }
+    it { expect(result).to eq ["^\nSyntaxError: invalid syntax", :errored] }
+  end
 end

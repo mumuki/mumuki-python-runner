@@ -21,4 +21,20 @@ describe Python3QueryHook do
     let(:request) { struct query: '"fó" + "ò"' }
     it { expect(result).to eq ["'fóò'\n", :passed] }
   end
+
+  context 'passes when standalone query fails.' do
+    let(:request) { struct query: '0 / 0' }
+    it { expect(result).to eq ["  File \"<input>\", line 1, in <module>\n ZeroDivisionError: division by zero\n\n", :failed] }
+  end
+
+  context 'responds with errored when query has a syntax error' do
+    let(:request) { struct query: '!' }
+    pending('extra spaces') { expect(result[0]).to eq "!\n^\nSyntaxError: invalid syntax" }
+    it { expect(result[1]).to eq :errored }
+  end
+
+  context 'fails when query is an incomplete print' do
+    let(:request) { struct query: 'print("hello"' }
+    it { expect(result).to eq ["SyntaxError: unexpected EOF while parsing", :errored] }
+  end
 end

@@ -25,11 +25,11 @@ python
 
   def compile_state(cookie)
     (cookie||[]).map do |statement|
-    <<~python
-    try:
-      #{statement}
-    except:
-      pass
+<<~python
+try:
+  #{statement}
+except:
+  pass
 python
     end
   end
@@ -45,6 +45,6 @@ python
   end
 
   def syntax_error_regexp
-    /(SyntheticMumukiSyntaxError: )|(\A  File .*\n(?m)(?=.*(SyntaxError|IndentationError)))/
+    /(SyntheticMumukiSyntaxError: )|((\A  File .*\n)?(?m)(?=.*(SyntaxError|IndentationError)))/
   end
 end
