@@ -12,11 +12,13 @@ describe Python3TryHook do
     context 'and query that matches' do
       let(:request) { struct query: '"something"', goal: goal }
       it { expect(result[1]).to eq :passed }
+      it { expect(result[2][:result]).to eq "'something'" }
     end
 
     context 'and query that does not match' do
       let(:request) { struct query: '"somethingElse"', goal: goal }
       it { expect(result[1]).to eq :failed }
+      it { expect(result[2][:result]).to eq "'somethingElse'" }
     end
   end
 
@@ -26,11 +28,77 @@ describe Python3TryHook do
     context 'and query that matches' do
       let(:request) { struct query: 'print(3)', goal: goal }
       it { expect(result[1]).to eq :passed }
+      it { expect(result[2][:result]).to eq '3' }
     end
 
     context 'and query that does not match' do
       let(:request) { struct query: 'abs(2)', goal: goal }
       it { expect(result[1]).to eq :failed }
+      it { expect(result[2][:result]).to eq '2' }
+    end
+  end
+
+  context 'try with last_query_matches goal, with string' do
+    let(:goal) { { kind: 'last_query_matches', regexp: '^print(.*)' } }
+
+    context 'and query that matches' do
+      let(:request) { struct query: 'print(3)', goal: goal }
+      it { expect(result[1]).to eq :passed }
+      it { expect(result[2][:result]).to eq '3' }
+    end
+
+    context 'and query that does not match' do
+      let(:request) { struct query: 'abs(2)', goal: goal }
+      it { expect(result[1]).to eq :failed }
+      it { expect(result[2][:result]).to eq '2' }
+    end
+  end
+
+  context 'try with last_query_matches goal, with =' do
+    let(:goal) { { kind: 'last_query_matches', regexp: '^4\W+!=\W+5' } }
+
+    context 'and query that matches' do
+      let(:request) { struct query: '4  !=  5  ', goal: goal }
+      it { expect(result[1]).to eq :passed }
+      it { expect(result[2][:result]).to eq 'True' }
+    end
+
+    context 'and query that does not match' do
+      let(:request) { struct query: '4 != 4   ', goal: goal }
+      it { expect(result[1]).to eq :failed }
+      it { expect(result[2][:result]).to eq 'False' }
+    end
+  end
+
+  context 'try with last_query_matches goal, with <' do
+    let(:goal) { { kind: 'last_query_matches', regexp: '^4\W+<\W+5' } }
+
+    context 'and query that matches' do
+      let(:request) { struct query: '4  <  5  ', goal: goal }
+      it { expect(result[1]).to eq :passed }
+      it { expect(result[2][:result]).to eq 'True' }
+    end
+
+    context 'and query that does not match' do
+      let(:request) { struct query: '4 < 4   ', goal: goal }
+      it { expect(result[1]).to eq :failed }
+      it { expect(result[2][:result]).to eq 'False' }
+    end
+  end
+
+  context 'try with last_query_matches goal, with prefix spaces' do
+    let(:goal) { { kind: 'last_query_matches', regexp: '^4\W+<\W+5' } }
+
+    context 'and query that matches' do
+      let(:request) { struct query: '    4  <  5', goal: goal }
+      it { expect(result[1]).to eq :failed }
+      it { expect(result[2]).to eq result: nil, status: :failed }
+    end
+
+    context 'and query that does not match' do
+      let(:request) { struct query: '    4 < 4', goal: goal }
+      it { expect(result[1]).to eq :failed }
+      it { expect(result[2]).to eq result: nil, status: :failed }
     end
   end
 
@@ -40,11 +108,13 @@ describe Python3TryHook do
     context 'and query with said output' do
       let(:request) { struct query: '1 + 2', goal: goal }
       it { expect(result[1]).to eq :passed }
+      it { expect(result[2][:result]).to eq '3' }
     end
 
     context 'and query with a different output' do
       let(:request) { struct query: '5', goal: goal }
       it { expect(result[1]).to eq :failed }
+      it { expect(result[2][:result]).to eq '5' }
     end
   end
 
@@ -54,11 +124,13 @@ describe Python3TryHook do
     context 'and query that makes said query pass' do
       let(:request) { struct query: 'my_var = 2;', goal: goal }
       it { expect(result[1]).to eq :failed }
+      it { expect(result[2][:result]).to eq '' }
     end
 
     context 'and query that does not make said query pass' do
       let(:request) { struct query: '', goal: goal }
       it { expect(result[1]).to eq :passed }
+      it { expect(result[2][:result]).to eq '' }
     end
   end
 
@@ -68,11 +140,13 @@ describe Python3TryHook do
     context 'and query that makes said query pass' do
       let(:request) { struct query: 'my_var = 2;', goal: goal }
       it { expect(result[1]).to eq :passed }
+      it { expect(result[2][:result]).to eq '' }
     end
 
-    context 'nd query that does not make said query pass' do
+    context 'and query that does not make said query pass' do
       let(:request) { struct query: '', goal: goal }
       it { expect(result[1]).to eq :failed }
+      it { expect(result[2][:result]).to eq '' }
     end
   end
 
@@ -82,11 +156,13 @@ describe Python3TryHook do
     context 'and query that generates said output' do
       let(:request) { struct query: 'my_var = 55;', goal: goal }
       it { expect(result[1]).to eq :passed }
+      it { expect(result[2][:result]).to eq '' }
     end
 
     context 'and query that does not generate said output' do
       let(:request) { struct query: 'my_var = 28', goal: goal }
       it { expect(result[1]).to eq :failed }
+      it { expect(result[2][:result]).to eq '' }
     end
   end
 
@@ -96,11 +172,13 @@ describe Python3TryHook do
     context 'and query that passes' do
       let(:request) { struct query: '123', goal: goal }
       it { expect(result[1]).to eq :passed }
+      it { expect(result[2][:result]).to eq '123' }
     end
 
     context 'and query that fails' do
       let(:request) { struct query: 'asdasd', goal: goal }
       it { expect(result[1]).to eq :failed }
+      pending { expect(result[2]).to eq result: "Reference error", status: :failed }
     end
   end
 end

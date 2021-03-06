@@ -1,17 +1,7 @@
 shared_examples "common python query hook" do
   context 'passes when standalone query is valid.' do
     let(:request) { struct query: '4 + 5' }
-    it { expect(result).to eq ["=> 9\n", :passed] }
-  end
-
-  context 'passes when standalone query is valid and returns a string.' do
-    let(:request) { struct query: '"foo"' }
-    it { expect(result).to eq ["=> foo\n", :passed] }
-  end
-
-  context 'passes when standalone query is valid and has utf8 chars.' do
-    let(:request) { struct query: '"fó" + "ò"' }
-    it { expect(result).to eq ["=> fóò\n", :passed] }
+    it { expect(result).to eq ["9\n", :passed] }
   end
 
   context 'passes when query is a single print' do
@@ -19,14 +9,34 @@ shared_examples "common python query hook" do
     it { expect(result).to eq ["hello\n", :passed] }
   end
 
-  context 'fails when query is a broken print' do
-    let(:request) { struct query: 'print("hello"' }
-    it { expect(result[1]).to eq :errored }
-  end
-
   context 'passes when query and content is valid.' do
     let(:request) { struct query: '4 + x', content: 'x = 10' }
-    it { expect(result).to eq ["=> 14\n", :passed] }
+    it { expect(result).to eq ["14\n", :passed] }
+  end
+
+  context 'passes when query is an == comparison' do
+    let(:request) { struct query: '123 == 123' }
+    it { expect(result).to eq ["True\n", :passed] }
+  end
+
+  context 'passes when query is an > comparison' do
+    let(:request) { struct query: '123 > 123' }
+    it { expect(result).to eq ["False\n", :passed] }
+  end
+
+  context 'passes when query is an <= comparison' do
+    let(:request) { struct query: '123 <= 123' }
+    it { expect(result).to eq ["True\n", :passed] }
+  end
+
+  context 'passes when query is an != comparison' do
+    let(:request) { struct query: '123 != 123' }
+    it { expect(result).to eq ["False\n", :passed] }
+  end
+
+  context 'passes when query is an >= comparison' do
+    let(:request) { struct query: '123 >= 123' }
+    it { expect(result).to eq ["True\n", :passed] }
   end
 
   context 'passes when query is an assignment' do
@@ -57,12 +67,12 @@ shared_examples "common python query hook" do
 
   context 'properly replaces variables when result is number' do
     let(:request) { struct query: 'x', cookie: ['x = 4'] }
-    it { expect(result).to eq ["=> 4\n", :passed] }
+    it { expect(result).to eq ["4\n", :passed] }
   end
 
   context 'properly replaces variables when result is boolean' do
     let(:request) { struct query: 'x == 4', cookie: ['x = 4'] }
-    it { expect(result).to eq ["=> True\n", :passed] }
+    it { expect(result).to eq ["True\n", :passed] }
   end
 
   context 'is stateful' do
@@ -80,16 +90,10 @@ shared_examples "common python query hook" do
     it { expect(result).to eq ["foo\n", :passed] }
   end
 
-  context 'responds with errored when query has a syntax error' do
-    let(:request) { struct query: '!' }
-    it { expect(result[0]).to eq %Q{!\n^\nSyntaxError: unexpected EOF while parsing (<console>, line 1)} }
-    it { expect(result[1]).to eq :errored }
-  end
-
   context 'responds with errored when query has an indentation error' do
     let(:request) { struct query: ' print("123")' }
-    it { expect(result[0]).to eq %q{print("123")
-    ^
+    pending('extra spaces') { expect(result[0]).to eq %q{print("123")
+^
 IndentationError: unexpected indent} }
     it { expect(result[1]).to eq :errored }
   end
