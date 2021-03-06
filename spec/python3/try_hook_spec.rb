@@ -115,7 +115,7 @@ describe Python3TryHook do
     context 'and query that does not make said query pass' do
       let(:request) { struct query: '', goal: goal }
       it { expect(result[1]).to eq :passed }
-      it { expect(result[2][:result]).to eq '' }
+      it { expect(result[2][:result]).to be nil }
     end
   end
 
@@ -128,10 +128,10 @@ describe Python3TryHook do
       it { expect(result[2][:result]).to eq '' }
     end
 
-    context 'nd query that does not make said query pass' do
+    context 'and query that does not make said query pass' do
       let(:request) { struct query: '', goal: goal }
       it { expect(result[1]).to eq :failed }
-      it { expect(result[2][:result]).to eq '' }
+      it { expect(result[2][:result]).to be nil }
     end
   end
 
@@ -163,7 +163,7 @@ describe Python3TryHook do
     context 'and query that fails' do
       let(:request) { struct query: 'asdasd', goal: goal }
       it { expect(result[1]).to eq :failed }
-      it { expect(result[2]).to eq :failed }
+      pending { expect(result[2]).to eq result: "Reference error", status: :failed }
     end
   end
 end

@@ -29,6 +29,31 @@ shared_examples "common python query hook" do
     it { expect(result).to eq ["=> 14\n", :passed] }
   end
 
+  context 'passes when query is an == comparison' do
+    let(:request) { struct query: '123 == 123' }
+    it { expect(result).to eq ["=> True\n", :passed] }
+  end
+
+  context 'passes when query is an > comparison' do
+    let(:request) { struct query: '123 > 123' }
+    it { expect(result).to eq ["=> False\n", :passed] }
+  end
+
+  context 'passes when query is an <= comparison' do
+    let(:request) { struct query: '123 <= 123' }
+    it { expect(result).to eq ["=> True\n", :passed] }
+  end
+
+  context 'passes when query is an != comparison' do
+    let(:request) { struct query: '123 != 123' }
+    it { expect(result).to eq ["=> False\n", :passed] }
+  end
+
+  context 'passes when query is an >= comparison' do
+    let(:request) { struct query: '123 >= 123' }
+    it { expect(result).to eq ["=> True\n", :passed] }
+  end
+
   context 'passes when query is an assignment' do
     let(:request) { struct query: 'foo = 123' }
     it { expect(result).to eq ["", :passed] }
