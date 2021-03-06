@@ -39,7 +39,7 @@ describe Python3TryHook do
   end
 
   context 'try with last_query_matches goal, with string' do
-    let(:goal) { { kind: 'last_query_matches', regexp: 'print(.*)' } }
+    let(:goal) { { kind: 'last_query_matches', regexp: '^print(.*)' } }
 
     context 'and query that matches' do
       let(:request) { struct query: 'print(3)', goal: goal }
@@ -55,7 +55,7 @@ describe Python3TryHook do
   end
 
   context 'try with last_query_matches goal, with =' do
-    let(:goal) { { kind: 'last_query_matches', regexp: '4\W+!=\W+5' } }
+    let(:goal) { { kind: 'last_query_matches', regexp: '^4\W+!=\W+5' } }
 
     context 'and query that matches' do
       let(:request) { struct query: '4  !=  5  ', goal: goal }
@@ -64,15 +64,14 @@ describe Python3TryHook do
     end
 
     context 'and query that does not match' do
-      let(:request) { struct query: '  4 != 4', goal: goal }
+      let(:request) { struct query: '4 != 4   ', goal: goal }
       it { expect(result[1]).to eq :failed }
       it { expect(result[2][:result]).to eq 'False' }
     end
   end
 
-
   context 'try with last_query_matches goal, with <' do
-    let(:goal) { { kind: 'last_query_matches', regexp: '4\W+<\W+5' } }
+    let(:goal) { { kind: 'last_query_matches', regexp: '^4\W+<\W+5' } }
 
     context 'and query that matches' do
       let(:request) { struct query: '4  <  5  ', goal: goal }
@@ -81,9 +80,25 @@ describe Python3TryHook do
     end
 
     context 'and query that does not match' do
-      let(:request) { struct query: '  4 < 4', goal: goal }
+      let(:request) { struct query: '4 < 4   ', goal: goal }
       it { expect(result[1]).to eq :failed }
       it { expect(result[2][:result]).to eq 'False' }
+    end
+  end
+
+  context 'try with last_query_matches goal, with prefix spaces' do
+    let(:goal) { { kind: 'last_query_matches', regexp: '^4\W+<\W+5' } }
+
+    context 'and query that matches' do
+      let(:request) { struct query: '    4  <  5', goal: goal }
+      it { expect(result[1]).to eq :failed }
+      it { expect(result[2]).to eq result: nil, status: :failed }
+    end
+
+    context 'and query that does not match' do
+      let(:request) { struct query: '    4 < 4', goal: goal }
+      it { expect(result[1]).to eq :failed }
+      it { expect(result[2]).to eq result: nil, status: :failed }
     end
   end
 

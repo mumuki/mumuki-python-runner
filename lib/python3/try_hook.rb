@@ -45,4 +45,9 @@ python
   def to_query_result(result, status)
     { result: result, status: status }
   end
+
+  def checker_options
+    { strip_mode: :right_only }
+  end
+
 end
