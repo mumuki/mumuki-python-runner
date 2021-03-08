@@ -39,6 +39,13 @@ class TestFoo(unittest.TestCase):
     expect(response).to eq(status: :passed, result: "9\n")
   end
 
+  it 'answers a valid hash when query has !=' do
+    response = bridge.run_query!(extra: 'x = 3',
+                                 content: 'y = 3',
+                                 query: 'x != y')
+    expect(response).to eq(status: :passed, result: "False\n")
+  end
+
   it 'answers a valid hash when submission has syntax errors' do
     response = bridge.
         run_tests!(test: '
