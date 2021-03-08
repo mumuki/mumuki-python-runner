@@ -56,7 +56,28 @@ class TestFoo(unittest.TestCase):
                            result: '')
   end
 
-  it 'answers a valid hash when submitting an interactive query that passes' do
+  it 'answers a valid hash when submitting an interactive query that fails' do
+    response = bridge.run_try!(
+        query: '4 >= 9',
+        cookie: [],
+        goal: { kind: 'last_query_equals', value: '4 < 9' })
+    expect(response).to eq(status: :failed,
+                           query_result: {result: "False", status: :passed},
+                           result: "query should be '4 < 9' but was '4 >= 9'")
+  end
+
+  it 'answers a valid hash when submitting an interactive query that fails and raises an error' do
+    response = bridge.run_try!(
+        query: 'print 4',
+        cookie: [],
+        goal: { kind: 'last_query_equals', value: '4 < 9' })
+    expect(response).to eq(status: :failed,
+                           query_result: {result: "SyntaxError: Missing parentheses in call to 'print'. Did you mean print(4)?", status: :failed},
+                           result: "query should be '4 < 9' but was 'print 4'")
+  end
+
+
+  it 'answers a valid hash when submitting an interactive query with regexps that passes' do
     response = bridge.run_try!(
         query: '5 in [1, 2, 4]',
         cookie: [
@@ -75,7 +96,7 @@ class TestFoo(unittest.TestCase):
                            result: "goal was met successfully")
   end
 
-  it 'answers a valid hash when submitting an interactive query that fails' do
+  it 'answers a valid hash when submitting an interactive query with regexps that fails' do
     response = bridge.run_try!(
         query: '3 in [1, 2, 3]',
         cookie: [
@@ -93,7 +114,6 @@ class TestFoo(unittest.TestCase):
                            query_result: {result: "True", status: :passed},
                            result: 'All the required queries must be executed')
   end
-
 
   it 'exposes python version' do
     expect(bridge.info['language']).to include('version' => '3.7.3')
