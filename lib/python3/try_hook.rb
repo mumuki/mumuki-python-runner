@@ -31,8 +31,8 @@ python
   def to_structured_results(_file, result, status)
     /#{query_separator}
 ?(.*)
-#{goal_separator}
-?(.*)
+(?:#{goal_separator}
+?(.*))?
 /m =~ result
 
     {

@@ -72,7 +72,7 @@ class TestFoo(unittest.TestCase):
         cookie: [],
         goal: { kind: 'last_query_equals', value: '4 < 9' })
     expect(response).to eq(status: :failed,
-                           query_result: {result: "SyntaxError: Missing parentheses in call to 'print'. Did you mean print(4)?", status: :failed},
+                           query_result: {result: "  File \"<input>\", line 1\n     print 4\n           ^\n SyntaxError: Missing parentheses in call to 'print'. Did you mean print(4)?", status: :failed},
                            result: "query should be '4 < 9' but was 'print 4'")
   end
 
