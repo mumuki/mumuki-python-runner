@@ -31,7 +31,7 @@ describe Python3TryHook do
     context 'when query errors' do
       let(:request) { struct query: 'print 4', goal: goal }
       it { expect(result[1]).to eq :failed }
-      it { expect(result[2][:status]).to eq :errored }
+      it { expect(result[2][:status]).to eq :failed }
       it { expect(result[2][:result]).to include "SyntaxError: Missing parentheses in call to 'print'. Did you mean print(4)?" }
     end
   end
