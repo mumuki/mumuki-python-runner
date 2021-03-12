@@ -46,6 +46,15 @@ class TestFoo(unittest.TestCase):
     expect(response).to eq(status: :passed, result: "False\n")
   end
 
+  it 'answers a valid hash when query produces an error due to extra' do
+    response = bridge.run_query!(extra: "def suma_sin_sentido():\n  return numero + 8",
+                                 content: '',
+                                 query: 'suma_sin_sentido()')
+
+    expect(response[:result]).to include "name 'numero' is not defined"
+    expect(response[:status]).to eq :failed
+  end
+
   it 'answers a valid hash when submission has syntax errors' do
     response = bridge.
         run_tests!(test: '

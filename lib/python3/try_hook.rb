@@ -29,15 +29,14 @@ python
   end
 
   def to_structured_results(_file, result, status)
-    /#{query_separator}
-?(.*)
-#{goal_separator}
-?(.*)
-/m =~ result
+    result_match = result[/#{query_separator}
+\K.*?(?=(#{goal_separator})|\z)/m]&.rstrip
+    goal_match = result[/#{goal_separator}
+\K.*\z/m]&.rstrip
 
     {
-        query: to_query_result($1, status),
-        goal: $2,
+        query: to_query_result(result_match, status),
+        goal: goal_match,
         status: status
     }
   end
