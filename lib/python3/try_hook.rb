@@ -19,6 +19,13 @@ python
 
   delegate :tempfile_extension, to: :query_hook
   delegate :command_line, to: :query_hook
+  delegate :error_patterns, to: :query_hook
+
+  def post_process_file(_file, result, status)
+    pattern = error_patterns.find { |it| it.matches? result, status }
+    result, status = pattern ? pattern.transform(result, status) : [result, status]
+    super _file, result, status
+  end
 
   def query_separator
     '!!!MUMUKI-QUERY-START!!!'

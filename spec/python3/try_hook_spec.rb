@@ -31,7 +31,7 @@ describe Python3TryHook do
     context 'when query errors' do
       let(:request) { struct query: 'print 4', goal: goal }
       it { expect(result[1]).to eq :failed }
-      it { expect(result[2][:status]).to eq :failed }
+      it { expect(result[2][:status]).to eq :errored }
       it { expect(result[2][:result]).to include "SyntaxError: Missing parentheses in call to 'print'. Did you mean print(4)?" }
     end
   end
@@ -106,13 +106,15 @@ describe Python3TryHook do
     context 'when query matches' do
       let(:request) { struct query: '    4  <  5', goal: goal }
       it { expect(result[1]).to eq :failed }
-      it { expect(result[2]).to eq result: "  File \"<input>\", line 1\n     4  <  5\n     ^\n IndentationError: unexpected indent", status: :failed }
+      it { expect(result[2][:result]).to eq "  File \"<input>\", line 1\n     4  <  5\n     ^\n IndentationError: unexpected indent" }
+      it { expect(result[2][:status]).to eq :errored }
     end
 
     context 'when query does not match' do
       let(:request) { struct query: '    4 < 4', goal: goal }
       it { expect(result[1]).to eq :failed }
-      it { expect(result[2]).to eq result: "  File \"<input>\", line 1\n     4 < 4\n     ^\n IndentationError: unexpected indent", status: :failed }
+      it { expect(result[2][:result]).to eq "  File \"<input>\", line 1\n     4 < 4\n     ^\n IndentationError: unexpected indent" }
+      it { expect(result[2][:status]).to eq :errored }
     end
   end
 
@@ -192,7 +194,15 @@ describe Python3TryHook do
     context 'when query fails' do
       let(:request) { struct query: 'asdasd', goal: goal }
       it { expect(result[1]).to eq :failed }
-      it { expect(result[2]).to eq result: "  File \"<input>\", line 1, in <module>\n NameError: name 'asdasd' is not defined", status: :failed }
+      it { expect(result[2][:result]).to eq "  File \"<input>\", line 1, in <module>\n NameError: name 'asdasd' is not defined" }
+      it { expect(result[2][:status]).to eq :failed }
+    end
+
+    context 'when query errors' do
+      let(:request) { struct query: 'asdasd 5', goal: goal }
+      it { expect(result[1]).to eq :failed }
+      it { expect(result[2][:result]).to eq "  File \"<input>\", line 1\n     asdasd 5\n            ^\n SyntaxError: invalid syntax" }
+      it { expect(result[2][:status]).to eq :errored }
     end
   end
 end
