@@ -19,12 +19,9 @@ python
 
   delegate :tempfile_extension, to: :query_hook
   delegate :command_line, to: :query_hook
-  delegate :error_patterns, to: :query_hook
 
-  def post_process_file(_file, result, status)
-    pattern = error_patterns.find { |it| it.matches? result, status }
-    result, status = pattern ? pattern.transform(result, status) : [result, status]
-    super _file, result, status
+  def post_process_file(file, result, status)
+    super file, *query_hook.post_process_file(file, result, status)
   end
 
   def query_separator
