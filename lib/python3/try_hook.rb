@@ -1,6 +1,5 @@
 class Python3TryHook < Mumukit::Templates::TryHook
   isolated true
-  attr_reader :query_hook
 
   def initialize(config = nil)
     super config
@@ -9,16 +8,20 @@ class Python3TryHook < Mumukit::Templates::TryHook
 
   def compile_file_content(r)
     <<python
-#{query_hook.compile_file_header(r)}
+#{@query_hook.compile_file_header(r)}
 print("#{query_separator}");
-#{query_hook.compile_query(r.query, '')}
+#{@query_hook.compile_query(r.query, '')}
 print("#{goal_separator}");
-#{query_hook.compile_query(r.goal.indifferent_get(:query) || 'None', '')}
+#{@query_hook.compile_query(r.goal.indifferent_get(:query) || 'None', '')}
 python
   end
 
-  delegate :tempfile_extension, to: :query_hook
-  delegate :command_line, to: :query_hook
+  delegate :tempfile_extension, to: :@query_hook
+  delegate :command_line, to: :@query_hook
+
+  def post_process_file(file, result, status)
+    super file, *@query_hook.post_process_file(file, result, status)
+  end
 
   def query_separator
     '!!!MUMUKI-QUERY-START!!!'
