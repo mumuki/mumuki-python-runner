@@ -33,6 +33,24 @@ shared_examples 'common python expectations hook' do
         {expectation: expectations[2], result: false}] }
   end
 
+  describe 'DeclaresMethod' do
+    let(:code) { "class Bird:\n\tdef __init__(self): pass\n\tdef fly(self): pass\n\n" }
+    let(:expectations) { [
+      {binding: '*', inspection: 'DeclaresMethod:fly'},
+      {binding: '*', inspection: 'DeclaresComputationWithArity1:fly'},
+      {binding: '*', inspection: 'DeclaresComputationWithArity0:__init__'},
+      {binding: 'Bird', inspection: 'DeclaresMethod:fly'},
+      {binding: 'Bird', inspection: 'DeclaresMethod:__init__'},
+      {binding: '*', inspection: 'DeclaresFunction:fly'}] }
+
+    it { expect(result).to eq [
+        {expectation: expectations[0], result: true},
+        {expectation: expectations[1], result: true},
+        {expectation: expectations[2], result: false},
+        {expectation: expectations[3], result: true},
+        {expectation: expectations[4], result: true},
+        {expectation: expectations[5], result: false}] }
+  end
 
   describe 'DeclaresFunction' do
     let(:code) { "def foo(x, y):\n\treturn x + y\n\nbar = 4" }
