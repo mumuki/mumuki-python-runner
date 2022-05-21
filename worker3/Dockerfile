@@ -6,5 +6,8 @@ RUN wget https://github.com/xmlrunner/unittest-xml-reporting/archive/2.5.1.zip &
     cd unittest-xml-reporting-2.5.1 && \
     python setup.py install
 
+RUN apk --update add --no-cache g++
+RUN pip install pandas==1.3.3
+
 COPY rununittest /bin/rununittest
 RUN chmod u+x /bin/rununittest
