@@ -197,4 +197,9 @@ class TestFoo(unittest.TestCase):
   it 'exposes seaborn version' do
     expect(bridge.info['libraries']['seaborn']).to eq('0.12.0')
   end
+
+  it 'exposes external editor' do
+    expect(bridge.info['external_editor_instructions']['Visual Studio Code']['en']).to_not eq ''
+    expect(bridge.info['external_editor_instructions']['Jupyter']['en']).to_not eq ''
+  end
 end
