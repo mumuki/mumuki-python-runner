@@ -16,8 +16,13 @@ class Test(unittest.TestCase):
   def test_description_example(self):
     self.assertTrue(True)
 python
-     }}
+     },
+     libraries: libraries,
+    }.compact
   end
 
   required :version
+
+  def libraries
+  end
 end

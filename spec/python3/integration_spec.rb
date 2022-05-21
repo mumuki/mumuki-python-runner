@@ -122,4 +122,8 @@ class TestFoo(unittest.TestCase):
   it 'exposes ruby comment type' do
     expect(bridge.info['comment_type']).to eq('ruby')
   end
+
+  it 'exposes pandas version' do
+    expect(bridge.info['libraries']['pandas']).to eq('1.3.3')
+  end
 end
