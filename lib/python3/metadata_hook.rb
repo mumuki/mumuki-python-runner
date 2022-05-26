@@ -1,8 +1,8 @@
 class Python3MetadataHook < BasePythonMetadataHook
   XCE_INSTRUCTIONS = {
-    'Jupyter': {
-      'en': File.read("xce/jupyter/en/README.md"),
-      'es-ar': File.read("xce/jupyter/es-ar/README.md"),
+    'Colab': {
+      'en': File.read("xce/colab/en/README.md"),
+      'es-ar': File.read("xce/colab/es-ar/README.md"),
     },
     'Visual Studio Code': {
       'en': File.read("xce/visual_studio/en/README.md"),

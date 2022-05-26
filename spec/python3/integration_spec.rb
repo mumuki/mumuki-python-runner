@@ -199,7 +199,7 @@ class TestFoo(unittest.TestCase):
   end
 
   it 'exposes external editor' do
-    expect(bridge.info['external_editor_instructions']['Visual Studio Code']['en']).to_not eq ''
-    expect(bridge.info['external_editor_instructions']['Jupyter']['en']).to_not eq ''
+    expect(bridge.info['external_editor_instructions']['Visual Studio Code']['es']).to_not eq ''
+    expect(bridge.info['external_editor_instructions']['Colab']['es']).to_not eq ''
   end
 end
