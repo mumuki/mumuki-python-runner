@@ -56,6 +56,22 @@ class TestFoo(unittest.TestCase):
                            result: '')
   end
 
+  it 'answers a valid hash when extra imports pandas and query uses a DataFrame' do
+    response = bridge.run_query!(extra: 'import pandas as pd',
+                                 content: '',
+                                 query: 'pd.DataFrame([{"name": "mary", "surname": "doe"}, {"name": "john", "surname": "doe"}])')
+    expect(response).to eq(status: :passed, result: "   name surname\n0  mary     doe\n1  john     doe\n")
+  end
+
+
+  it 'answers a valid hash when importing and using pandas in query' do
+    response = bridge.run_query!(extra: '',
+                                 content: '',
+                                 query: 'pd.DataFrame([{"name": "mary", "surname": "doe"}, {"name": "john", "surname": "doe"}])',
+                                 cookie: ['import pandas as pd'])
+    expect(response).to eq(status: :passed, result: "   name surname\n0  mary     doe\n1  john     doe\n")
+  end
+
   it 'answers a valid hash when submitting an interactive query that fails' do
     response = bridge.run_try!(
         query: '4 >= 9',
