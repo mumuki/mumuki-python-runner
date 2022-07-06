@@ -10,4 +10,19 @@ RUN apk --update add --no-cache g++
 RUN pip install pandas==1.3.3
 
 COPY rununittest /bin/rununittest
-RUN chmod u+x /bin/rununittest
+
+RUN adduser mumuki --home /home/mumuki -D
+RUN chmod o-x -R /bin/*
+RUN chmod o-x -R /sbin/
+RUN chmod o-x -R /usr/bin/*
+RUN chmod o-x -R /usr/sbin/
+RUN chmod o-x /usr/local/bin/*
+
+RUN chmod o+x /bin/rununittest
+RUN chmod o+x /bin/touch
+RUN chmod o+x /bin/cat
+RUN chmod o+x /usr/bin/test
+RUN chmod o+x /usr/local/bin/python
+
+WORKDIR /home/mumuki/
+USER mumuki
