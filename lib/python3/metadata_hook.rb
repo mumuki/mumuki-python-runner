@@ -4,6 +4,10 @@ class Python3MetadataHook < BasePythonMetadataHook
   end
 
   def libraries
-    {pandas: '1.3.3'}
+    {
+      pandas: '1.3.3',
+      matplotlib: '3.5.3',
+      seaborn: '0.12.0'
+    }
   end
 end

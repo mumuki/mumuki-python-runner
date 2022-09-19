@@ -1,4 +1,4 @@
-FROM python:3.7.3-alpine
+FROM python:3.7.3
 MAINTAINER Franco Leonardo Bulgarelli
 
 RUN wget https://github.com/xmlrunner/unittest-xml-reporting/archive/2.5.1.zip && \
@@ -6,8 +6,9 @@ RUN wget https://github.com/xmlrunner/unittest-xml-reporting/archive/2.5.1.zip &
     cd unittest-xml-reporting-2.5.1 && \
     python setup.py install
 
-RUN apk --update add --no-cache g++
-RUN pip install pandas==1.3.3
+RUN pip install pandas==1.3.3 \
+                matplotlib==3.5.3 \
+                seaborn==0.12.0
 
 COPY rununittest /bin/rununittest
 RUN chmod u+x /bin/rununittest
