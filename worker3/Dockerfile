@@ -7,7 +7,8 @@ RUN wget https://github.com/xmlrunner/unittest-xml-reporting/archive/2.5.1.zip &
     python setup.py install
 
 RUN pip install pandas==1.3.3 \
-                matplotlib==3.5.3
+                matplotlib==3.5.3 \
+                seaborn==0.12.0
 
 COPY rununittest /bin/rununittest
 RUN chmod u+x /bin/rununittest

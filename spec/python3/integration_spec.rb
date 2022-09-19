@@ -56,6 +56,47 @@ class TestFoo(unittest.TestCase):
                            result: '')
   end
 
+  it 'answers a valid hash when submission is ok and uses plotting tools' do
+    response = bridge.
+        run_tests!(test: <<~EOF,
+                    def test_nothing(self):
+                        pass
+                    EOF
+                   extra: '',
+                   content: <<~EOF,
+                    import matplotlib.pyplot as plt
+                    import seaborn as sns
+                    import pandas as pd
+
+                    sns.set_theme()
+
+                    flights_long = pd.DataFrame([
+                      {'year': 1949, 'month': 'Jan', 'passengers': 112},
+                      {'year': 1949, 'month': 'Feb', 'passengers': 118},
+                      {'year': 1949, 'month': 'Mar', 'passengers': 132},
+                      {'year': 1949, 'month': 'Apr', 'passengers': 129},
+                      {'year': 1949, 'month': 'May', 'passengers': 121},
+                      {'year': 1949, 'month': 'Jun', 'passengers': 135},
+                      {'year': 1949, 'month': 'Jul', 'passengers': 148},
+                      {'year': 1949, 'month': 'Aug', 'passengers': 148},
+                      {'year': 1949, 'month': 'Sep', 'passengers': 136},
+                      {'year': 1949, 'month': 'Oct', 'passengers': 119}])
+                    flights = flights_long.pivot("month", "year", "passengers")
+
+                    f, ax = plt.subplots(figsize=(9, 6))
+                    sns.heatmap(flights, annot=True, fmt="d", linewidths=.5, ax=ax)
+
+                    EOF
+                   expectations: []).
+        reject { |k, _v| k == :result }
+
+    expect(response).to eq(response_type: :structured,
+        test_results: [{result: '', status: :passed, title: 'Nothing'}],
+        status: :passed,
+        feedback: '',
+        expectation_results: [])
+  end
+
   it 'answers a valid hash when extra imports pandas and query uses a DataFrame' do
     response = bridge.run_query!(extra: 'import pandas as pd',
                                  content: '',
@@ -63,13 +104,19 @@ class TestFoo(unittest.TestCase):
     expect(response).to eq(status: :passed, result: "   name surname\n0  mary     doe\n1  john     doe\n")
   end
 
-
   it 'answers a valid hash when importing and using pandas in query' do
     response = bridge.run_query!(extra: '',
                                  content: '',
                                  query: 'pd.DataFrame([{"name": "mary", "surname": "doe"}, {"name": "john", "surname": "doe"}])',
                                  cookie: ['import pandas as pd'])
     expect(response).to eq(status: :passed, result: "   name surname\n0  mary     doe\n1  john     doe\n")
+  end
+
+  it 'answers a valid hash when extra imports pandas and query plots a DataFrame' do
+    response = bridge.run_query!(extra: 'import pandas as pd',
+                                 content: 'df = pd.DataFrame([{"a": 1, "bar": 2}, {"a": "john", "bar": 2}])',
+                                 query: 'df.plot.bar()')
+    expect(response).to eq(status: :passed, result: "<AxesSubplot:>\n")
   end
 
   it 'answers a valid hash when submitting an interactive query that fails' do
@@ -141,5 +188,13 @@ class TestFoo(unittest.TestCase):
 
   it 'exposes pandas version' do
     expect(bridge.info['libraries']['pandas']).to eq('1.3.3')
+  end
+
+  it 'exposes matplotlib version' do
+    expect(bridge.info['libraries']['matplotlib']).to eq('3.5.3')
+  end
+
+  it 'exposes seaborn version' do
+    expect(bridge.info['libraries']['seaborn']).to eq('0.12.0')
   end
 end
