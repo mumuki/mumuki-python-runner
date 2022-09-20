@@ -1,6 +1,6 @@
 ### Login into Colab
 
-In order to solve this exercise, you will need to create and account and login into [`Colab`](https://colab.research.google.com/) first.
+In order to solve this exercise, you will need to create an account and login into [`Colab`](https://colab.research.google.com/) first.
 
 ### Solving an exercise
 
