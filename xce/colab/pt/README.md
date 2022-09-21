@@ -1,6 +1,6 @@
 ### Login no Colab
 
-Para resolver esses exercícios, você precisará fazer login no [`Colab`](https://colab.research.google.com/).
+Para resolver exercícios como este, você precisará fazer login no [`Colab`](https://colab.research.google.com/).
 
 ### Resolvendo um exercício
 

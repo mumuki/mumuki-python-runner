@@ -1,6 +1,6 @@
 ### Ingreso a Colab
 
-Para poder resolver estos ejercicios, necesitarás ingresar a [`Colab`](https://colab.research.google.com/). ¡Asegurate de haber iniciado sesión!
+Para poder resolver ejercicios como éste, necesitarás ingresar a [`Colab`](https://colab.research.google.com/). ¡Asegurate de haber iniciado sesión!
 
 ### Resolución de un ejercicio
 

@@ -1,6 +1,6 @@
 ### Environment setup
 
-You will need to use `python` and `pip` in order to solve exercises. Please ensure you have those commands locally installed in your computer. Then install `mumuki-xce`:
+You will need to use `python` and `pip` in order to solve exercises like this. Please ensure you have those commands locally installed in your computer. Then install `mumuki-xce`:
 
 ```shell
 pip install mumuki-xce

@@ -1,6 +1,6 @@
 ### Preparação do ambiente
 
-Para resolver estes exercícios, você precisará usar os comandos `python` e `pip`. Antes de começar, certifique-se de tê-los instalados. Então, execute o seguinte comando, apenas uma vez (se você já fez isso antes, você pode pular para o próximo passo):
+Para resolver exercícios como este, você precisará usar os comandos `python` e `pip`. Antes de começar, certifique-se de tê-los instalados. Então, execute o seguinte comando, apenas uma vez (se você já fez isso antes, você pode pular para o próximo passo):
 
 ```shell
 pip install mumuki-xce
