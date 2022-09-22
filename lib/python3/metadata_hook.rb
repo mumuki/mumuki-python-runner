@@ -1,16 +1,20 @@
 class Python3MetadataHook < BasePythonMetadataHook
+  def self.read_xce_file(path)
+    File.read(File.expand_path "../../../xce/#{path}", __FILE__)
+  end
+
   XCE_INSTRUCTIONS = {
     'Colab': {
-      'en': File.read("xce/colab/en/README.md"),
-      'pt': File.read("xce/colab/pt/README.md"),
-      'es': File.read("xce/colab/es-ar/README.md"),
-      'es-ar': File.read("xce/colab/es-ar/README.md")
+      'en': read_xce_file('colab/en/README.md'),
+      'pt': read_xce_file('colab/pt/README.md'),
+      'es': read_xce_file('colab/es-ar/README.md'),
+      'es-ar': read_xce_file('colab/es-ar/README.md')
     },
     'Visual Studio Code': {
-      'en': File.read("xce/visual_studio/en/README.md"),
-      'pt': File.read("xce/visual_studio/pt/README.md"),
-      'es': File.read("xce/visual_studio/es-ar/README.md"),
-      'es-ar': File.read("xce/visual_studio/es-ar/README.md")
+      'en': read_xce_file('visual_studio/en/README.md'),
+      'pt': read_xce_file('visual_studio/pt/README.md'),
+      'es': read_xce_file('visual_studio/es-ar/README.md'),
+      'es-ar': read_xce_file('visual_studio/es-ar/README.md')
     }
   }
 
