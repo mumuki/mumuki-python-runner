@@ -7,7 +7,7 @@ Para poder resolver ejercicios como éste, necesitarás ingresar a [`Colab`](htt
 Primero, creá una celda con el siguiente código:
 
 ```python
-!pip install mumuki-xce
+!pip install mumuki-xce --quiet
 
 from mumuki import IMumuki
 mumuki = IMumuki("#...token...#", "#...locale...#")

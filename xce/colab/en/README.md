@@ -7,7 +7,7 @@ In order to solve exercises like this, you will need to create an account and lo
 First, create a cell with the following code:
 
 ```python
-!pip install mumuki-xce
+!pip install mumuki-xce --quiet
 
 from mumuki import IMumuki
 mumuki = IMumuki("#...token...#", "#...locale...#")

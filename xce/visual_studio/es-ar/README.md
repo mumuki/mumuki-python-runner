@@ -3,7 +3,7 @@
 Para poder resolver ejercicios como éste, necesitarás utilizar los comandos `python` y `pip`. Antes de comenzar, asegurate de tenerlos instalados. Después, ejecutá el siguiente comando, por única vez (si ya lo hiciste anteriormente, podés saltar al siguente paso):
 
 ```shell
-pip install mumuki-xce
+pip install mumuki-xce --quiet
 ```
 
 ¡Ya podés empezar a resolver ejercicios!

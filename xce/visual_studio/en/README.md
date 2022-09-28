@@ -3,7 +3,7 @@
 You will need to use `python` and `pip` in order to solve exercises like this. Please ensure you have those commands locally installed in your computer. Then install `mumuki-xce`:
 
 ```shell
-pip install mumuki-xce
+pip install mumuki-xce --quiet
 ```
 
 Now you are ready to solve exercises!
