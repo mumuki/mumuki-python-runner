@@ -45,6 +45,25 @@ def test_greet_is_hello(self):
       ]] }
   end
 
+  context 'properly displays complex string comparisons with whitespaces' do
+    let(:request) { struct(content: '
+def greet():
+  return "hello "', test: '
+def test_greet_is_hello(self):
+  self.assertEqual(greet(), "hello")') }
+
+    it { expect(result[0]).to match_array [[
+      "Greet is hello",
+      :failed,
+      <<~EOM
+      AssertionError: 'hello ' != 'hello'
+      - hello\s
+      ?      -
+      + hello
+      EOM
+      ]] }
+  end
+
   context 'properly displays complex list comparisons' do
     let(:request) { struct(content: '
 def numbers():
@@ -75,7 +94,7 @@ def test_numbers_is_a_list(self):
   context 'properly displays complex dict comparisons' do
     let(:request) { struct(content: '
 def person():
-  return {}', test: '
+  return {"age":25}', test: '
 def test_person_is_a_dict(self):
   self.assertEqual(person(), {"name":"Umi", "age":28})') }
 
@@ -83,10 +102,39 @@ def test_person_is_a_dict(self):
       "Person is a dict",
       :failed,
       <<~EOM
-      AssertionError: {} != {'name': 'Umi', 'age': 28}
-      - {}
+      AssertionError: {'age': 25} != {'name': 'Umi', 'age': 28}
+      - {'age': 25}
       + {'age': 28, 'name': 'Umi'}
       EOM
       ]] }
+  end
+
+  context 'properly displays complex dict comparisons with newlines inside' do
+    let(:request) do
+      struct(
+        content: <<~EOM,
+        def person():
+          return {"name": "Umi\\n", "age":28}
+        EOM
+        test: <<~EOM
+        def test_person_is_a_dict(self):
+          self.assertEqual(person(), {"name":"Umi", "age":28})
+        EOM
+      )
+    end
+
+    it do
+      expect(result[0]).to match_array [[
+        "Person is a dict",
+        :failed,
+        <<~EOM
+        AssertionError: {'name': 'Umi\\n', 'age': 28} != {'name': 'Umi', 'age': 28}
+        - {'age': 28, 'name': 'Umi\\n'}
+        ?                         --
+
+        + {'age': 28, 'name': 'Umi'}
+        EOM
+      ]]
+    end
   end
 end

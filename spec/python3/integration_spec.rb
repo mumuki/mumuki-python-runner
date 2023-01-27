@@ -29,6 +29,40 @@ def test_foo_returns_false(self):
                            response_type: :structured)
   end
 
+  it 'answers a valid hash when submission is not ok because of simple assertion failure' do
+    response = bridge.
+        run_tests!(test: '
+def test_x_returns_1(self):
+    self.assertEqual(x, 1)',
+                   extra: '',
+                   content: 'x = 10',
+                   expectations: []).
+        reject { |k, _v| k == :result }
+
+    expect(response).to eq(status: :failed,
+                           expectation_results: [],
+                           feedback: '',
+                           test_results: [{result: "AssertionError: 10 != 1", status: :failed, title: 'X returns 1'}],
+                           response_type: :structured)
+  end
+
+  it 'answers a valid hash when submission is not ok because of multiline assertion failure' do
+    response = bridge.
+        run_tests!(test: '
+def test_x_returns_hi(self):
+    self.assertEqual(x, "hi")',
+                   extra: '',
+                   content: 'x = "fi"',
+                   expectations: []).
+        reject { |k, _v| k == :result }
+
+    expect(response).to eq(status: :failed,
+                           expectation_results: [],
+                           feedback: '',
+                           test_results: [{result: "AssertionError: 'fi' != 'hi'\n- fi\n+ hi\n", status: :failed, title: 'X returns hi'}],
+                           response_type: :structured)
+  end
+
   it 'answers a valid hash when submission presents version-specific expectations and behaviour' do
     response = bridge.run_tests!(
         test: '
