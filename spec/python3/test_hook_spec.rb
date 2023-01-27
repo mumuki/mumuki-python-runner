@@ -20,9 +20,73 @@ def test_false_is_true(self):
   self.assertTrue(False)
 ') }
     it { expect(result[0]).to match_array [
-                                              ['Ruby is python', :failed, "AssertionError: 'ruby' != 'python' - ruby + python "],
+                                              ['Ruby is python', :failed, "AssertionError: 'ruby' != 'python'\n- ruby\n+ python\n"],
                                               ['True is true', :passed, ''],
                                               ['False is true', :failed, 'AssertionError: False is not true'],
                                           ] }
+  end
+
+
+  context 'properly displays complex string comparisons' do
+    let(:request) { struct(content: '
+def greet():
+  return "hello world"', test: '
+def test_greet_is_hello(self):
+  self.assertEqual(greet(), "hello")') }
+
+    it { expect(result[0]).to match_array [[
+      "Greet is hello",
+      :failed,
+      <<~EOM
+      AssertionError: 'hello world' != 'hello'
+      - hello world
+      + hello
+      EOM
+      ]] }
+  end
+
+  context 'properly displays complex list comparisons' do
+    let(:request) { struct(content: '
+def numbers():
+  return [1, 2, 5, 8]', test: '
+def test_numbers_is_a_list(self):
+  self.assertEqual(numbers(), [1, 2, 4, 5, 6, 7, 8])') }
+
+    it { expect(result[0]).to match_array [[
+      "Numbers is a list",
+      :failed,
+      <<~EOM
+      AssertionError: Lists differ: [1, 2, 5, 8] != [1, 2, 4, 5, 6, 7, 8]
+
+      First differing element 2:
+      5
+      4
+
+      Second list contains 3 additional elements.
+      First extra element 4:
+      6
+
+      - [1, 2, 5, 8]
+      + [1, 2, 4, 5, 6, 7, 8]
+      EOM
+      ]] }
+  end
+
+  context 'properly displays complex dict comparisons' do
+    let(:request) { struct(content: '
+def person():
+  return {}', test: '
+def test_person_is_a_dict(self):
+  self.assertEqual(person(), {"name":"Umi", "age":28})') }
+
+    it { expect(result[0]).to match_array [[
+      "Person is a dict",
+      :failed,
+      <<~EOM
+      AssertionError: {} != {'name': 'Umi', 'age': 28}
+      - {}
+      + {'age': 28, 'name': 'Umi'}
+      EOM
+      ]] }
   end
 end
