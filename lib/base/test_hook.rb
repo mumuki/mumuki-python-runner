@@ -68,7 +68,7 @@ python
 
   def try_extract_assertion_error(failure)
     failure.text.split("AssertionError: ")[1]&.rstrip.try do |it|
-      it.lines.count > 1 ? it + "\n" : it
+      it.each_line.count > 1 ? it + "\n" : it
     end
   end
 
