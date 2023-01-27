@@ -57,19 +57,19 @@ python
     failure = test_case.xpath('failure', 'error')
     error = failure.attribute('type')
     message = failure.attribute('message')
-    assertion_error_message = failure.text.split("AssertionError: ")[1]&.rstrip.try do |it|
-      if it.lines.count > 1
-        it + "\n"
-      else
-        it
-      end
-    end
+    assertion_error_message = try_extract_assertion_error(failure)
 
     [
         format_test_name(test_case.attribute('name').to_s),
         error.nil? ? :passed: :failed,
         error.nil? ? '' : "#{error}: #{assertion_error_message || message}"
     ]
+  end
+
+  def try_extract_assertion_error(failure)
+    failure.text.split("AssertionError: ")[1]&.rstrip.try do |it|
+      it.lines.count > 1 ? it + "\n" : it
+    end
   end
 
   def format_test_name(name)
