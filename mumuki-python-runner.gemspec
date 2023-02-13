@@ -18,7 +18,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'mumukit', '~> 2.41'
-  spec.add_dependency 'mulang', '~> 6.0', '>= 6.0.8'
+  spec.add_dependency 'mulang', '~> 6.10'
 
   spec.add_development_dependency 'bundler', '~> 2.0'
   spec.add_development_dependency 'rake', '~> 12.3'
