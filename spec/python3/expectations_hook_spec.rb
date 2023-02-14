@@ -22,6 +22,56 @@ describe Python3ExpectationsHook do
 
   end
 
+  describe 'calls with nonliterals' do
+    let(:expectations) { [] }
+
+    let(:code) do
+      <<~EOC
+      def is_weekend_1(x):
+        return x == ('sat' or 'sun')
+
+      def is_weekend_2(x):
+        return x in ('sat' or 'sun')
+
+      def is_weekend_3(x):
+        return x == 'sat' or x == 'sun'
+      EOC
+    end
+    let(:custom_expectations) do
+      <<~EOC
+      expectation:
+        within `is_weekend_1` calls or with (nonliteral, nonliteral);
+
+      expectation:
+        within `is_weekend_1` ! calls or with (literal, literal);
+
+      expectation:
+        within `is_weekend_2` calls or with (nonliteral, nonliteral);
+
+      expectation:
+        within `is_weekend_2` ! calls or with (literal, literal);
+
+      expectation:
+        within `is_weekend_3` calls or with (nonliteral, nonliteral);
+
+      expectation:
+        within `is_weekend_3` ! calls or with (literal, literal);
+      EOC
+    end
+
+    it do
+      expect(result).to eq [
+        {expectation: {binding: "<<custom>>", inspection: "E0"}, result: false},
+        {expectation: {binding: "<<custom>>", inspection: "E1"}, result: false},
+        {expectation: {binding: "<<custom>>", inspection: "E2"}, result: false},
+        {expectation: {binding: "<<custom>>", inspection: "E3"}, result: false},
+        {expectation: {binding: "<<custom>>", inspection: "E4"}, result: true},
+        {expectation: {binding: "<<custom>>", inspection: "E5"}, result: true},
+        {expectation: {binding: "is_weekend_3", inspection: "DoesTypeTest"}, result: false}
+      ]
+    end
+  end
+
   describe 'UsesSetAt' do
     let(:code) do
       "def clear_at(x):\n\tx['a'] = 0"
