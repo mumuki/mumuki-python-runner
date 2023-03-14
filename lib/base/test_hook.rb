@@ -16,6 +16,7 @@ class BasePythonTestHook < Mumukit::Templates::FileHook
 import unittest
 import xmlrunner
 import sys
+from datetime import datetime, date
 
 #{request.extra}
 #{request.content}

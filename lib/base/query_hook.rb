@@ -14,6 +14,7 @@ class BasePythonQueryHook < Mumukit::Templates::FileHook
     <<python
 # -*- coding: UTF-8 -*-
 import string, sys, os
+from datetime import datetime, date
 
 #{req.extra}
 #{req.content}
