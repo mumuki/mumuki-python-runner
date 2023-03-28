@@ -69,7 +69,7 @@ def test_foo_returns_false(self):
                            feedback: '',
                            test_results: [],
                            result: "Traceback (most recent call last):\n" +
-                                   "  File \"solution.py\", line 9, in <module>\n" +
+                                   "  File \"solution.py\", line 1, in <module>\n" +
                                    "    no#COMPILA!\"\n" +
                                    "NameError: name 'no' is not defined\n",
                            response_type: :unstructured)
