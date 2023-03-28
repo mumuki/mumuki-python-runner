@@ -83,6 +83,15 @@ python
   end
 
   def format_test_name(name)
-    name.sub('test_', '').gsub('_', ' ').capitalize
+    name
+      .sub('test_', '')
+      .gsub('__PL__', '(')
+      .gsub('__PR__', ')')
+      .gsub('__DT__', '.')
+      .gsub('__CM__', ',')
+      .gsub('__QT__', '\'')
+      .gsub('__DQ__', '"')
+      .gsub('_', ' ')
+      .capitalize
   end
 end

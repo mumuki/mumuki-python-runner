@@ -8,6 +8,15 @@ def test_true_is_true(self):
     it { expect(result[0]).to match_array [['True is true', :passed, '']] }
   end
 
+  context 'formats special words' do
+    let(:request) { struct(content: '
+def foo():
+  return 4', test: '
+def test_foo__PL__5__DT__1__CM____QT__hello__QT____CM____DQ__bar__DQ____PR__(self):
+  self.assertTrue(True)') }
+    it { expect(result[0]).to match_array [['Foo(5.1,\'hello\',"bar")', :passed, '']] }
+  end
+
   context 'fails when test fails' do
     let(:request) { struct(content: '
 def foo():
