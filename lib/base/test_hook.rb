@@ -1,5 +1,6 @@
 class BasePythonTestHook < Mumukit::Templates::FileHook
   isolated true
+  line_number_offset 8, include_extra: true
 
   def tempfile_extension
     '.py'
@@ -16,6 +17,7 @@ class BasePythonTestHook < Mumukit::Templates::FileHook
 import unittest
 import xmlrunner
 import sys
+from datetime import datetime, date
 
 #{request.extra}
 #{request.content}
@@ -37,6 +39,14 @@ python
     [generate_test_results(Nokogiri::XML(xml))]
   rescue
     [output, :errored]
+  end
+
+  def line_number_reference_regexp
+    /"#{masked_tempfile_path}", line (\d+)/m
+  end
+
+  def rebuild_line_number_reference(new_line_number)
+    "\"#{masked_tempfile_path}\", line #{new_line_number}"
   end
 
   private

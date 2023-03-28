@@ -26,6 +26,49 @@ def test_false_is_true(self):
                                           ] }
   end
 
+  context 'properly displays line numbers on compilation failure' do
+    let(:request) do
+      struct(
+        content: <<~EOF,
+        def greet()
+          return "hello world"
+        EOF
+        test: <<~EOF,
+        def test_greet_is_hello(self):
+          self.assertEqual(greet(), "hello")')
+        EOF
+        extra: extra
+      )
+    end
+
+    context 'with extra' do
+      let(:extra) do
+        "x = 42\n"
+      end
+
+      it do
+        expect(result[0]).to eq(
+          "  File \"solution.py\", line 1\n"\
+          "    def greet()\n"\
+          "              ^\n"\
+          "SyntaxError: invalid syntax\n")
+      end
+    end
+
+    context 'without extra' do
+      let(:extra) do
+        nil
+      end
+
+      it do
+        expect(result[0]).to eq(
+          "  File \"solution.py\", line 1\n"\
+          "    def greet()\n"\
+          "              ^\n"\
+          "SyntaxError: invalid syntax\n")
+      end
+    end
+  end
 
   context 'properly displays complex string comparisons' do
     let(:request) { struct(content: '
