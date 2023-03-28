@@ -24,6 +24,16 @@ describe Python3QueryHook do
     it { expect(result).to eq ["'foo'\n", :passed] }
   end
 
+  context 'passes when standalone query is valid and returns a date.' do
+    let(:request) { struct query: 'date(2014, 11, 20)' }
+    it { expect(result).to eq ["datetime.date(2014, 11, 20)\n", :passed] }
+  end
+
+  context 'passes when standalone query is valid and returns a datetime.' do
+    let(:request) { struct query: 'datetime(2014, 11, 20, 0, 0, 0)' }
+    it { expect(result).to eq ["datetime.datetime(2014, 11, 20, 0, 0)\n", :passed] }
+  end
+
   context 'passes when standalone query is valid and has utf8 chars.' do
     let(:request) { struct query: '"fó" + "ò"' }
     it { expect(result).to eq ["'fóò'\n", :passed] }
