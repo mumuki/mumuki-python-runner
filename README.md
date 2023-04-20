@@ -14,7 +14,7 @@ cd mumuki-python-runner
 ## Install global dependencies
 
 ```bash
-rbenv install 2.6.3
+rbenv install 3.2.2
 rbenv rehash
 gem install bundler
 ```
